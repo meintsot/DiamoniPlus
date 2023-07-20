@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-ssl": "ng serve --ssl true --ssl-key ../../../../../diamoni-plus-rest-api/src/main/resources/private-key.key --ssl-cert ../../../../../diamoni-plus-rest-api/src/main/resources/certificate.crt",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
