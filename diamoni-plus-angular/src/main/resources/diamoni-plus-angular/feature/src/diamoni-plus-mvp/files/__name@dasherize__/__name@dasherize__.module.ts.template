@@ -1,0 +1,20 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import <%= name %>Component from './<%= dasherize(name) %>.component';
+import <%= name %>ContainerComponent from './<%= dasherize(name) %>.container';
+import { <%= name %>RoutingModule } from './<%= dasherize(name) %>-routing.module';
+
+@NgModule({
+  declarations: [
+    <%= name %>Component,
+    <%= name %>ContainerComponent
+  ],
+  imports: [
+    CommonModule,
+    <%= name %>RoutingModule
+  ],
+  exports: [
+    <%= name %>ContainerComponent
+  ]
+})
+export class <%= name %>Module { }

@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "diamoni-plus-mvp": {
+      "description": "A schematic for generating the MVP structure for a feature.",
+      "factory": "./diamoni-plus-mvp/index#diamoniPlusMVP",
+      "schema": "./diamoni-plus-mvp/schema.json"
+    }
+  }
+}
