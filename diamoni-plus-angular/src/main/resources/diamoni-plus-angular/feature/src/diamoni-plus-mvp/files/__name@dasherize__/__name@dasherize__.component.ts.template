@@ -1,0 +1,24 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+<% if(presenter) { %>
+import { <%= classify(name) %>Presenter } from './<%= dasherize(name) %>.presenter';
+<% } %>
+import { Subject } from 'rxjs';
+
+@Component({
+  selector: 'app-<%= dasherize(name) %>-ui',
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>'], <% if(presenter) { %>
+  providers: [<%= classify(name) %>Presenter]<% } %>
+})
+export class <%= classify(name) %>Component implements OnInit, OnDestroy {
+  private destroy: Subject<void> = new Subject();
+
+  constructor(<% if(presenter) { %>private presenter: <%= classify(name) %>Presenter<% } %>) { }
+
+  ngOnInit(): void { }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+  }
+}

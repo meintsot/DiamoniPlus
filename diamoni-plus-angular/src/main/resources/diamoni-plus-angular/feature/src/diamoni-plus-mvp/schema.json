@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "diamoni-plus-mvp",
+  "title": "Collection Schema for creating MVP structure.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the feature.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "path": {
+      "type": "string",
+      "format": "path",
+      "description": "The path to create the feature.",
+      "visible": false
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "presenter": {
+      "type": "boolean",
+      "default": true,
+      "description": "Specifies if a presenter is generated."
+    },
+    "style": {
+      "type": "string",
+      "default": "css",
+      "enum": [
+        "css",
+        "scss",
+        "sass",
+        "less",
+        "styl"
+      ],
+      "description": "Specifies the file extension for the component style file.",
+      "x-prompt": {
+        "message": "Which stylesheet format would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": "css", "label": "CSS" },
+          { "value": "scss", "label": "SCSS" },
+          { "value": "sass", "label": "Sass" },
+          { "value": "less", "label": "Less" }
+        ]
+      }
+    },
+    "spec": {
+      "type": "boolean",
+      "default": false,
+      "description": "Specifies if a spec file is generated."
+    }
+  },
+  "required": [
+    "name",
+    "style"
+  ],
+  "additionalProperties": false
+}

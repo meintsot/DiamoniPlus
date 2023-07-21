@@ -1,0 +1,19 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Component({
+  selector: 'app-<%= dasherize(name) %>',
+  templateUrl: './<%= dasherize(name) %>.container.html',
+})
+export class <%= classify(name) %>ContainerComponent implements OnInit, OnDestroy {
+  private destroy: Subject<void> = new Subject();
+
+  constructor() { }
+
+  ngOnInit(): void { }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+  }
+}

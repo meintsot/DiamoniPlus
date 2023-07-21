@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "start-ssl": "ng serve --ssl true --ssl-key ../../../../../diamoni-plus-rest-api/src/main/resources/private-key.key --ssl-cert ../../../../../diamoni-plus-rest-api/src/main/resources/certificate.crt",
+    "build-shematic": "tsc -p feature/tsconfig.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.1.4",
+    "@angular-devkit/schematics-cli": "^16.1.4",
     "@angular/cli": "~16.1.4",
     "@angular/compiler-cli": "^16.1.0",
     "@types/jasmine": "~4.3.0",
