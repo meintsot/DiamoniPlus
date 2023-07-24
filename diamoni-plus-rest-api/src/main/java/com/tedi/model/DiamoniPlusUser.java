@@ -1,6 +1,10 @@
 package com.tedi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -56,6 +60,44 @@ public class DiamoniPlusUser {
     @Version
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
+
+    @Lob
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "is_host_approved")
+    private Boolean isHostApproved = false;
+
+    @PositiveOrZero
+    @Min(0)
+    @Max(5)
+    @Digits(integer = 1, fraction = 1)
+    @Column(name = "average_reviews", nullable = false)
+    private Double averageReviews;
+
+    public Double getAverageReviews() {
+        return averageReviews;
+    }
+
+    public void setAverageReviews(Double averageReviews) {
+        this.averageReviews = averageReviews;
+    }
+
+    public Boolean getIsHostApproved() {
+        return isHostApproved;
+    }
+
+    public void setIsHostApproved(Boolean isHostApproved) {
+        this.isHostApproved = isHostApproved;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public Integer getDiamoniPlusVersion() {
         return diamoniPlusVersion;
