@@ -1,8 +1,8 @@
 package com.tedi;
 
-import com.tedi.auth.AuthService;
-import com.tedi.auth.JwtUtils;
+import com.tedi.auth.AuthUtils;
 import com.tedi.auth.Roles;
+import com.tedi.auth.UserService;
 import com.tedi.dto.HelloType;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -16,13 +16,13 @@ import java.util.Collections;
 public class GreetingResource {
 
     @Inject
-    AuthService authService;
+    UserService userService;
 
     @GET
     @RolesAllowed({Roles.ADMIN, Roles.HOST})
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "Hello " + authService.getUser();
+        return "Hello " + userService.getUser();
     }
 
     @POST
@@ -30,6 +30,6 @@ public class GreetingResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String createHello(HelloType helloType) {
-        return JwtUtils.generateJWT(helloType.getUsername(), Collections.singletonList(helloType.getRole()));
+        return AuthUtils.generateJWT(helloType.getUsername(), Collections.singletonList(helloType.getRole()));
     }
 }
