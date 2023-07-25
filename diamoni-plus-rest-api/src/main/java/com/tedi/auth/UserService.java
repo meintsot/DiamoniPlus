@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @ApplicationScoped
-public class AuthService {
+public class UserService {
     @Inject
     JsonWebToken jsonWebToken;
 

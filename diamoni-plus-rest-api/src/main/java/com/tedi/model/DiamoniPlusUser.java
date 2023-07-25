@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "DiamoniPlusUser.findByUsername", query = "select d from DiamoniPlusUser d where d.username = :username"),
+        @NamedQuery(name = "DiamoniPlusUser.findByEmail", query = "select d from DiamoniPlusUser d where d.email = :email")
+})
 public class DiamoniPlusUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +65,9 @@ public class DiamoniPlusUser {
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
 
+    @Column(name = "phone", length = 32)
+    private String phone;
+
     @Lob
     @Column(name = "avatar")
     private String avatar;
@@ -73,7 +80,15 @@ public class DiamoniPlusUser {
     @Max(5)
     @Digits(integer = 1, fraction = 1)
     @Column(name = "average_reviews", nullable = false)
-    private Double averageReviews;
+    private Double averageReviews = 0.0;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public Double getAverageReviews() {
         return averageReviews;
