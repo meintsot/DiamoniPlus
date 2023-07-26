@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "rental_image")
+@NamedQueries({
+        @NamedQuery(name = "RentalImage.findByBinaryIdentificationIn", query = "select r from RentalImage r where r.binaryIdentification in :binaryIdentifications")
+})
 public class RentalImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +28,8 @@ public class RentalImage {
     @Column(name = "size", nullable = false)
     private Long size;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "rental_space_id", nullable = false)
-    private RentalSpace rentalSpace;
+    @Column(name = "binary_identification", nullable = false)
+    private String binaryIdentification;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -38,48 +41,12 @@ public class RentalImage {
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
 
-    public Integer getDiamoniPlusVersion() {
-        return diamoniPlusVersion;
+    public Long getId() {
+        return id;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
-    }
-
-    public String getMime() {
-        return mime;
-    }
-
-    public void setMime(String mime) {
-        this.mime = mime;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getData() {
@@ -90,19 +57,59 @@ public class RentalImage {
         this.data = data;
     }
 
-    public RentalSpace getRentalSpace() {
-        return rentalSpace;
+    public String getName() {
+        return name;
     }
 
-    public void setRentalSpace(RentalSpace rentalSpace) {
-        this.rentalSpace = rentalSpace;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public String getMime() {
+        return mime;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMime(String mime) {
+        this.mime = mime;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public String getBinaryIdentification() {
+        return binaryIdentification;
+    }
+
+    public void setBinaryIdentification(String binaryIdentification) {
+        this.binaryIdentification = binaryIdentification;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getDiamoniPlusVersion() {
+        return diamoniPlusVersion;
+    }
+
+    public void setDiamoniPlusVersion(Integer diamoniPlusVersion) {
+        this.diamoniPlusVersion = diamoniPlusVersion;
     }
 }

@@ -1,6 +1,9 @@
 package com.tedi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +29,18 @@ public class Location {
     @Column(name = "postcode", length = 10)
     private String postcode;
 
+    @DecimalMin(value = "-90.0", inclusive = true, message = "Latitude must be between -90 and 90 degrees.")
+    @DecimalMax(value = "90.0", inclusive = true, message = "Latitude must be between -90 and 90 degrees.")
+    @Digits(integer = 2, fraction = 6, message = "Latitude must have at most 2 integer digits and 6 fraction digits.")
+    @Column(name = "latitude")
+    private double latitude;
+
+    @DecimalMin(value = "-180.0", inclusive = true, message = "Longitude must be between -180 and 180 degrees.")
+    @DecimalMax(value = "180.0", inclusive = true, message = "Longitude must be between -180 and 180 degrees.")
+    @Digits(integer = 3, fraction = 6, message = "Longitude must have at most 3 integer digits and 6 fraction digits.")
+    @Column(name = "longitude")
+    private double longitude;
+
     @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
     @JoinColumn(name = "rental_space_id", nullable = false)
     private RentalSpace rentalSpace;
@@ -40,56 +55,12 @@ public class Location {
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
 
-    public Integer getDiamoniPlusVersion() {
-        return diamoniPlusVersion;
+    public Long getId() {
+        return id;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public String getSuburb() {
-        return suburb;
-    }
-
-    public void setSuburb(String suburb) {
-        this.suburb = suburb;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCountry() {
@@ -100,6 +71,54 @@ public class Location {
         this.country = country;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSuburb() {
+        return suburb;
+    }
+
+    public void setSuburb(String suburb) {
+        this.suburb = suburb;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public RentalSpace getRentalSpace() {
         return rentalSpace;
     }
@@ -108,11 +127,27 @@ public class Location {
         this.rentalSpace = rentalSpace;
     }
 
-    public Long getId() {
-        return id;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getDiamoniPlusVersion() {
+        return diamoniPlusVersion;
+    }
+
+    public void setDiamoniPlusVersion(Integer diamoniPlusVersion) {
+        this.diamoniPlusVersion = diamoniPlusVersion;
     }
 }

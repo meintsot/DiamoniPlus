@@ -1,11 +1,18 @@
 package com.tedi.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDateTime;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Review.findByHost_Username", query = "select r from Review r where r.host.username = :username"),
+        @NamedQuery(name = "Review.findByBooking_RentalSpace_RentalSpaceReference", query = "select r from Review r where r.booking.rentalSpace.rentalSpaceReference = :rentalSpaceReference")
+})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +30,7 @@ public class Review {
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "booking_id")
     private Booking booking;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "diamoni_plus_user_id")
-    private DiamoniPlusUser diamoniPlusUser;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -39,6 +41,20 @@ public class Review {
     @Version
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private DiamoniPlusUser tenant;
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private DiamoniPlusUser host;
+
+    public DiamoniPlusUser getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(DiamoniPlusUser tenant) {
+        this.tenant = tenant;
+    }
 
     public Integer getDiamoniPlusVersion() {
         return diamoniPlusVersion;
@@ -76,14 +92,6 @@ public class Review {
         this.rating = rating;
     }
 
-    public DiamoniPlusUser getDiamoniPlusUser() {
-        return diamoniPlusUser;
-    }
-
-    public void setDiamoniPlusUser(DiamoniPlusUser diamoniPlusUser) {
-        this.diamoniPlusUser = diamoniPlusUser;
-    }
-
     public Booking getBooking() {
         return booking;
     }
@@ -98,5 +106,13 @@ public class Review {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DiamoniPlusUser getHost() {
+        return host;
+    }
+
+    public void setHost(DiamoniPlusUser host) {
+        this.host = host;
     }
 }

@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Booking.findByBookingReference", query = "select b from Booking b where b.bookingReference = :bookingReference")
+})
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +20,9 @@ public class Booking {
 
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
+    @Column(name = "booking_reference", nullable = false)
+    private String bookingReference;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "host_id", nullable = false)
@@ -43,32 +49,12 @@ public class Booking {
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
 
-    public Integer getDiamoniPlusVersion() {
-        return diamoniPlusVersion;
+    public Long getId() {
+        return id;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getStartDate() {
@@ -79,28 +65,20 @@ public class Booking {
         this.startDate = startDate;
     }
 
-    public Review getReview() {
-        return review;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
-    public RentalSpace getRentalSpace() {
-        return rentalSpace;
+    public String getBookingReference() {
+        return bookingReference;
     }
 
-    public void setRentalSpace(RentalSpace rentalSpace) {
-        this.rentalSpace = rentalSpace;
-    }
-
-    public DiamoniPlusUser getTenant() {
-        return tenant;
-    }
-
-    public void setTenant(DiamoniPlusUser tenant) {
-        this.tenant = tenant;
+    public void setBookingReference(String bookingReference) {
+        this.bookingReference = bookingReference;
     }
 
     public DiamoniPlusUser getHost() {
@@ -111,11 +89,51 @@ public class Booking {
         this.host = host;
     }
 
-    public Long getId() {
-        return id;
+    public DiamoniPlusUser getTenant() {
+        return tenant;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTenant(DiamoniPlusUser tenant) {
+        this.tenant = tenant;
+    }
+
+    public RentalSpace getRentalSpace() {
+        return rentalSpace;
+    }
+
+    public void setRentalSpace(RentalSpace rentalSpace) {
+        this.rentalSpace = rentalSpace;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getDiamoniPlusVersion() {
+        return diamoniPlusVersion;
+    }
+
+    public void setDiamoniPlusVersion(Integer diamoniPlusVersion) {
+        this.diamoniPlusVersion = diamoniPlusVersion;
     }
 }
