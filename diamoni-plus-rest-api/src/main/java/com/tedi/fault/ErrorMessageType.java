@@ -12,9 +12,23 @@ public enum ErrorMessageType {
     DATA_03_AuthService("Invalid username or password."),
     DATA_04_AuthService("Invalid password for the current user."),
 
-    DATA_05_AuthService("Invalid JWT credentials.")
+    DATA_05_AuthService("Invalid JWT credentials."),
 
-    ;
+    MESS_01_RentalSpaceService("Space area must be larger than 20 sq.m."),
+    MESS_02_RentalSpaceService("Host is not approved by administration."),
+    MESS_03_RentalSpaceService("Rental space does not belong to this user."),
+
+    DATA_01_RentalSpaceService("Host not found."),
+    DATA_02_RentalSpaceService("Rental space not found."),
+    DATA_03_RentalSpaceService("Rental space image not found."),
+
+    MESS_01_ReviewsService("Either host username or rental space uuid is required."),
+    MESS_02_ReviewsService("Cannot submit a review for a host user and a rental space simultaneously."),
+    MESS_03_ReviewsService("Either host username or rental space reference is required."),
+
+    DATA_01_ReviewsService("Tenant not found!"),
+    DATA_02_ReviewsService("Host not found!"),
+    DATA_03_ReviewsService("Booking not found!");
 
     private final String error;
 

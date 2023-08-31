@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "diamoni_plus_user")
 @NamedQueries({
         @NamedQuery(name = "DiamoniPlusUser.findByUsername", query = "select d from DiamoniPlusUser d where d.username = :username"),
         @NamedQuery(name = "DiamoniPlusUser.findByEmail", query = "select d from DiamoniPlusUser d where d.email = :email")
@@ -42,8 +43,11 @@ public class DiamoniPlusUser {
     @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> tenantedBookings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "diamoniPlusUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviewsReceived = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviewsSent = new ArrayList<>();
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> sentMessages = new ArrayList<>();
@@ -82,88 +86,15 @@ public class DiamoniPlusUser {
     @Column(name = "average_reviews", nullable = false)
     private Double averageReviews = 0.0;
 
-    public String getPhone() {
-        return phone;
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RentalSpace> rentalSpaces = new ArrayList<>();
+
+    public Long getId() {
+        return id;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Double getAverageReviews() {
-        return averageReviews;
-    }
-
-    public void setAverageReviews(Double averageReviews) {
-        this.averageReviews = averageReviews;
-    }
-
-    public Boolean getIsHostApproved() {
-        return isHostApproved;
-    }
-
-    public void setIsHostApproved(Boolean isHostApproved) {
-        this.isHostApproved = isHostApproved;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public Integer getDiamoniPlusVersion() {
-        return diamoniPlusVersion;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -174,20 +105,68 @@ public class DiamoniPlusUser {
         this.username = username;
     }
 
-    public RoleType getRoleType() {
-        return roleType;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public List<Message> getReceivedMessages() {
-        return receivedMessages;
+    public String getPassword() {
+        return password;
     }
 
-    public void setReceivedMessages(List<Message> receivedMessages) {
-        this.receivedMessages = receivedMessages;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public List<Booking> getHostedBookings() {
+        return hostedBookings;
+    }
+
+    public void setHostedBookings(List<Booking> hostedBookings) {
+        this.hostedBookings = hostedBookings;
+    }
+
+    public List<Booking> getTenantedBookings() {
+        return tenantedBookings;
+    }
+
+    public void setTenantedBookings(List<Booking> tenantedBookings) {
+        this.tenantedBookings = tenantedBookings;
+    }
+
+    public List<Review> getReviewsReceived() {
+        return reviewsReceived;
+    }
+
+    public void setReviewsReceived(List<Review> reviewsReceived) {
+        this.reviewsReceived = reviewsReceived;
+    }
+
+    public List<Review> getReviewsSent() {
+        return reviewsSent;
+    }
+
+    public void setReviewsSent(List<Review> reviewsSent) {
+        this.reviewsSent = reviewsSent;
     }
 
     public List<Message> getSentMessages() {
@@ -198,35 +177,83 @@ public class DiamoniPlusUser {
         this.sentMessages = sentMessages;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
+    public List<Message> getReceivedMessages() {
+        return receivedMessages;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
+    public void setReceivedMessages(List<Message> receivedMessages) {
+        this.receivedMessages = receivedMessages;
     }
 
-    public List<Booking> getTenantedBookings() {
-        return tenantedBookings;
+    public RoleType getRoleType() {
+        return roleType;
     }
 
-    public void setTenantedBookings(List<Booking> tenanted_bookings) {
-        this.tenantedBookings = tenanted_bookings;
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
     }
 
-    public List<Booking> getHostedBookings() {
-        return hostedBookings;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setHostedBookings(List<Booking> hosted_bookings) {
-        this.hostedBookings = hosted_bookings;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Long getId() {
-        return id;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getDiamoniPlusVersion() {
+        return diamoniPlusVersion;
+    }
+
+    public void setDiamoniPlusVersion(Integer diamoniPlusVersion) {
+        this.diamoniPlusVersion = diamoniPlusVersion;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Boolean getHostApproved() {
+        return isHostApproved;
+    }
+
+    public void setHostApproved(Boolean hostApproved) {
+        isHostApproved = hostApproved;
+    }
+
+    public Double getAverageReviews() {
+        return averageReviews;
+    }
+
+    public void setAverageReviews(Double averageReviews) {
+        this.averageReviews = averageReviews;
+    }
+
+    public List<RentalSpace> getRentalSpaces() {
+        return rentalSpaces;
+    }
+
+    public void setRentalSpaces(List<RentalSpace> rentalSpaces) {
+        this.rentalSpaces = rentalSpaces;
     }
 }
