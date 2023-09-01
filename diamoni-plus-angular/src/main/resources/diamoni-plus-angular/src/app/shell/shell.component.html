@@ -1,0 +1,35 @@
+<!-- Navigation Bar -->
+<div class="shell-header">
+  <p-menubar [model]="items">
+    <!-- ... other code ... -->
+    <ng-template pTemplate="end" *ngIf="isLoggedIn && !avatarUrl">
+      <div clickable (click)="navigateToProfile()">
+        <p-avatar label="{{fullNameAcronym}}" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="end" *ngIf="!isLoggedIn">
+      <div clickable (click)="navigateToProfile()">
+        <p-avatar *ngIf="userInfo" (click)="navigateToProfile()" image="https://i.stack.imgur.com/l60Hf.png"
+                  styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="end" *ngIf="isLoggedIn && avatarUrl">
+      <div clickable (click)="navigateToProfile()">
+        <p-avatar *ngIf="userInfo" (click)="navigateToProfile()" image="{{avatarUrl}}"
+                  styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>
+
+<!-- Content Area -->
+<div class="shell-content full-viewport">
+  <router-outlet></router-outlet>
+</div>
+
+<p-toast></p-toast>
+
+<!-- Footer -->
+<div class="shell-footer">
+  <p>Copyright &copy; 2023, Room Rental Application</p>
+</div>

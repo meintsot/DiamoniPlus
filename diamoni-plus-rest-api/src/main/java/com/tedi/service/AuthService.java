@@ -7,11 +7,14 @@ import com.tedi.dto.*;
 import com.tedi.fault.ErrorMessageType;
 import com.tedi.fault.ValidationFault;
 import com.tedi.mapper.DiamoniPlusUserMapper;
+import com.tedi.mapper.ImageFileMapper;
 import com.tedi.model.DiamoniPlusUser;
 import com.tedi.validator.AuthValidator;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -29,6 +32,9 @@ public class AuthService {
 
     @Inject
     DiamoniPlusUserMapper diamoniPlusUserMapper;
+
+    @Inject
+    ImageFileMapper imageFileMapper;
 
     public RegisterRespMsgType register(RegisterReqMsgType param) throws ValidationFault {
 
@@ -98,5 +104,22 @@ public class AuthService {
         authValidator.validatePassword(param.getNewPassword(), param.getPasswordConfirmation());
 
         diamoniPlusUser.setPassword(AuthUtils.hashPassword(param.getNewPassword()));
+    }
+
+    public RetrieveUserInfoRespMsgType retrieveUserInfo() throws ValidationFault {
+
+        DiamoniPlusUser diamoniPlusUser = diamoniPlusUserDao.findByUsername(userService.getUser()).orElseThrow(
+                () -> new ValidationFault(ErrorMessageType.DATA_05_AuthService)
+        );
+
+        RetrieveUserInfoRespMsgType response = new RetrieveUserInfoRespMsgType();
+
+        response.setUsername(diamoniPlusUser.getUsername());
+        response.setRole(userService.getRole());
+        response.setFirstName(diamoniPlusUser.getFirstName());
+        response.setLastName(diamoniPlusUser.getLastName());
+        response.setAvatar(imageFileMapper.toImageFileType(diamoniPlusUser.getAvatar()));
+
+        return response;
     }
 }

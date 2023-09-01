@@ -59,22 +59,8 @@ public class DiamoniPlusUser {
     @Column(name = "role_type", nullable = false)
     private RoleType roleType;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Version
-    @Column(name = "diamoni_plus_version")
-    private Integer diamoniPlusVersion;
-
     @Column(name = "phone", length = 32)
     private String phone;
-
-    @Lob
-    @Column(name = "avatar")
-    private String avatar;
 
     @Column(name = "is_host_approved")
     private Boolean isHostApproved = false;
@@ -88,6 +74,20 @@ public class DiamoniPlusUser {
 
     @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RentalSpace> rentalSpaces = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "avatar_id")
+    private ImageFile avatar;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Version
+    @Column(name = "diamoni_plus_version")
+    private Integer diamoniPlusVersion;
 
     public Long getId() {
         return id;
@@ -193,44 +193,12 @@ public class DiamoniPlusUser {
         this.roleType = roleType;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Integer getDiamoniPlusVersion() {
-        return diamoniPlusVersion;
-    }
-
-    public void setDiamoniPlusVersion(Integer diamoniPlusVersion) {
-        this.diamoniPlusVersion = diamoniPlusVersion;
-    }
-
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public Boolean getHostApproved() {
@@ -255,5 +223,37 @@ public class DiamoniPlusUser {
 
     public void setRentalSpaces(List<RentalSpace> rentalSpaces) {
         this.rentalSpaces = rentalSpaces;
+    }
+
+    public ImageFile getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(ImageFile avatar) {
+        this.avatar = avatar;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getDiamoniPlusVersion() {
+        return diamoniPlusVersion;
+    }
+
+    public void setDiamoniPlusVersion(Integer diamoniPlusVersion) {
+        this.diamoniPlusVersion = diamoniPlusVersion;
     }
 }
