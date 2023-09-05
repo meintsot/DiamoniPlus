@@ -6,6 +6,7 @@ import com.tedi.dao.RentalSpaceDao;
 import com.tedi.dto.*;
 import com.tedi.fault.ErrorMessageType;
 import com.tedi.fault.ValidationFault;
+import com.tedi.mapper.ImageFileMapper;
 import com.tedi.mapper.RentalSpaceMapper;
 import com.tedi.model.*;
 import com.tedi.validator.RentalSpaceValidator;
@@ -34,6 +35,9 @@ public class RentalSpaceService {
     @Inject
     RentalSpaceMapper rentalSpaceMapper;
 
+    @Inject
+    ImageFileMapper imageFileMapper;
+
     public CreateRentalSpaceRespMsgType createRentalSpace(CreateRentalSpaceReqMsgType param) throws ValidationFault {
 
         rentalSpaceValidator.validateArea(param.getArea());
@@ -45,6 +49,9 @@ public class RentalSpaceService {
         rentalSpaceValidator.validateIsHostApproved(host);
 
         RentalSpace rentalSpace = rentalSpaceMapper.toRentalSpace(param);
+        List<ImageFile> rentalImages = rentalSpaceDao.retrieveRentalImages(param.getRentalImageIdentifications());
+        rentalSpaceValidator.validateAtLeastOneRentalImageIsRequired(rentalImages);
+        rentalSpace.getRentalImages().addAll(rentalImages);
         rentalSpace.setHost(host);
         host.getRentalSpaces().add(rentalSpace);
         rentalSpaceDao.saveRentalSpace(rentalSpace);
@@ -58,11 +65,9 @@ public class RentalSpaceService {
     public SearchRentalSpacesRespMsgType searchRentalSpaces(SearchRentalSpacesReqMsgType param) throws ValidationFault {
 
         List<RentalSpaceDBType> rentalSpaceResults = rentalSpaceDao.searchRentalSpaces(param);
-        List<String> binaryIdentifications = rentalSpaceResults.stream().map(RentalSpaceDBType::getRentalImageIdentification).toList();
         Long totalResults = rentalSpaceDao.countRentalSpaces(param);
-        List<RentalImage> rentalImages = rentalSpaceDao.retrieveRentalImages(binaryIdentifications);
 
-        List<RentalSpaceResultType> rentalSpaceResultTypes = rentalSpaceMapper.toRentalSpaceResultType(rentalSpaceResults, rentalImages);
+        List<RentalSpaceResultType> rentalSpaceResultTypes = rentalSpaceMapper.toRentalSpaceResultType(rentalSpaceResults);
 
         SearchRentalSpacesRespMsgType response = new SearchRentalSpacesRespMsgType();
         response.setRentalSpaceResults(rentalSpaceResultTypes);
@@ -203,16 +208,18 @@ public class RentalSpaceService {
         rentalSpace.setUpdatedAt(LocalDateTime.now());
     }
 
-    public RetrieveRentalImagesRespMsgType retrieveRentalImages(String rentalSpaceReference) throws ValidationFault {
+    public RetrieveRentalImageRespMsgType retrieveRentalImage(String rentalSpaceReference, String binaryIdentification) throws ValidationFault {
 
-        RentalSpace rentalSpace = rentalSpaceDao.retrieveRentalSpaceDetails(rentalSpaceReference).orElseThrow(
-                () -> new ValidationFault(ErrorMessageType.DATA_02_RentalSpaceService)
+        ImageFile rentalImage = rentalSpaceDao.retrieveRentalImage(rentalSpaceReference, binaryIdentification).orElseThrow(
+                () -> new ValidationFault(ErrorMessageType.DATA_03_RentalSpaceService)
         );
 
-        return rentalSpaceMapper.toRetrieveRentalImagesRespMsgType(rentalSpace);
+        RetrieveRentalImageRespMsgType response = new RetrieveRentalImageRespMsgType();
+        response.setRentalImage(imageFileMapper.toImageFileType(rentalImage));
+        return response;
     }
 
-    public void addRentalImage(AddRentalImageReqMsgType param) throws ValidationFault {
+    public UploadRentalImageRespMsgType uploadRentalImage(UploadRentalImageReqMsgType param) throws ValidationFault {
 
         DiamoniPlusUser host = diamoniPlusUserDao.findByUsername(userService.getUser()).orElseThrow(
                 () -> new ValidationFault(ErrorMessageType.DATA_01_RentalSpaceService)
@@ -220,35 +227,29 @@ public class RentalSpaceService {
 
         rentalSpaceValidator.validateIsHostApproved(host);
 
-        RentalSpace rentalSpace = rentalSpaceDao.retrieveRentalSpaceDetails(param.getRentalSpaceReference()).orElseThrow(
-                () -> new ValidationFault(ErrorMessageType.DATA_02_RentalSpaceService)
-        );
+        ImageFile rentalImage = imageFileMapper.toImageFile(param.getRentalImage());
 
-        rentalSpaceValidator.validateIsRentalSpaceFromHost(rentalSpace, host);
+        rentalSpaceDao.saveRentalImage(rentalImage);
 
-        RentalImage rentalImage = rentalSpaceMapper.toRentalImage(param.getRentalImage());
-        rentalSpace.getRentalImages().add(rentalImage);
+        UploadRentalImageRespMsgType response = new UploadRentalImageRespMsgType();
+        response.setBinaryIdentification(rentalImage.getBinaryIdentification());
+        return response;
     }
 
-    public void deleteRentalImage(String rentalSpaceReference, String binaryIdentification) throws ValidationFault {
+    public void deleteRentalImage(String binaryIdentification) throws ValidationFault {
 
-        boolean isRentalImageOfHost = rentalSpaceDao.isRentalImageOfHost(userService.getUser(), rentalSpaceReference, binaryIdentification);
-
-        if (!isRentalImageOfHost) {
+        boolean success = rentalSpaceDao.deleteRentalImage(binaryIdentification);
+        if (!success) {
             throw new ValidationFault(ErrorMessageType.DATA_03_RentalSpaceService);
         }
-
-        rentalSpaceDao.deleteRentalImage(binaryIdentification);
     }
 
     public MyRentalSpacesRespMsgType myRentalSpaces(MyRentalSpacesReqMsgType param) {
 
         List<RentalSpaceDBType> rentalSpaceResults = rentalSpaceDao.myRentalSpaces(param, userService.getUser());
-        List<String> binaryIdentifications = rentalSpaceResults.stream().map(RentalSpaceDBType::getRentalImageIdentification).toList();
         Long totalResults = rentalSpaceDao.countMyRentalSpaces(param, userService.getUser());
-        List<RentalImage> rentalImages = rentalSpaceDao.retrieveRentalImages(binaryIdentifications);
 
-        List<RentalSpaceResultType> rentalSpaceResultTypes = rentalSpaceMapper.toRentalSpaceResultType(rentalSpaceResults, rentalImages);
+        List<RentalSpaceResultType> rentalSpaceResultTypes = rentalSpaceMapper.toRentalSpaceResultType(rentalSpaceResults);
 
         MyRentalSpacesRespMsgType response = new MyRentalSpacesRespMsgType();
         response.setRentalSpaceResults(rentalSpaceResultTypes);

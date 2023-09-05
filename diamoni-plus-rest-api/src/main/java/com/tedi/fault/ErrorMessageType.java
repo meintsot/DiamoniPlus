@@ -16,6 +16,7 @@ public enum ErrorMessageType {
     MESS_01_RentalSpaceService("Space area must be larger than 20 sq.m."),
     MESS_02_RentalSpaceService("Host is not approved by administration."),
     MESS_03_RentalSpaceService("Rental space does not belong to this user."),
+    MESS_04_RentalSpaceService("At least one rental space image is required."),
 
     DATA_01_RentalSpaceService("Host not found."),
     DATA_02_RentalSpaceService("Rental space not found."),

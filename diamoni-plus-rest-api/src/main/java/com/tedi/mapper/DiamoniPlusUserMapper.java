@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Objects;
 
 @ApplicationScoped
 public class DiamoniPlusUserMapper {
@@ -27,7 +28,9 @@ public class DiamoniPlusUserMapper {
         diamoniPlusUser.setEmail(param.getEmail());
         diamoniPlusUser.setPhone(param.getPhone());
         diamoniPlusUser.setRoleType(RoleType.fromValue(param.getDesiredRole()));
-        diamoniPlusUser.setAvatar(imageFileMapper.toImageFile(param.getAvatar()));
+        if (Objects.nonNull(param.getAvatar())) {
+            diamoniPlusUser.setAvatar(imageFileMapper.toImageFile(param.getAvatar()));
+        }
         diamoniPlusUser.setCreatedAt(LocalDateTime.now());
         diamoniPlusUser.setUpdatedAt(LocalDateTime.now());
 

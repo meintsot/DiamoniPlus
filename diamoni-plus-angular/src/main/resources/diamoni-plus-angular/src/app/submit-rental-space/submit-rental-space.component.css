@@ -1,0 +1,41 @@
+.p-inputgroup * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  min-width: 800px;
+}
+
+.map {
+  height: 200px;
+}
+
+.scrollable-div {
+  max-height: 230px;
+  max-width: 800px;
+  overflow-y: auto;
+}
+
+@media (max-height: 230px) {
+  .scrollable-div {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollable-div::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .scrollable-div {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollable-div::-webkit-scrollbar {
+    display: none;
+  }
+}

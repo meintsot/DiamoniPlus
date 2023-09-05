@@ -4,14 +4,17 @@ import com.tedi.dto.*;
 import com.tedi.model.*;
 import com.tedi.utils.DataUtils;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
 public class RentalSpaceMapper {
+
+    @Inject
+    ImageFileMapper imageFileMapper;
 
     public RentalSpace toRentalSpace(CreateRentalSpaceReqMsgType param) {
         
@@ -37,31 +40,11 @@ public class RentalSpaceMapper {
         location.setRentalSpace(rentalSpace);
         rentalSpace.setLocation(location);
         rentalSpace.setTransportationAccess(toTransportationAccess(param.getTransportationAccess()));
-        rentalSpace.setRentalImages(toRentalImage(param.getRentalImages()));
         rentalSpace.setCreatedAt(LocalDateTime.now());
         rentalSpace.setUpdatedAt(LocalDateTime.now());
         rentalSpace.setRentalSpaceReference(UUID.randomUUID().toString());
 
         return rentalSpace;
-    }
-
-    private List<RentalImage> toRentalImage(List<RentalImageType> rentalImageTypeList) {
-
-        return rentalImageTypeList.stream().map(this::toRentalImage).toList();
-    }
-
-    public RentalImage toRentalImage(RentalImageType rentalImageType) {
-
-        RentalImage rentalImage = new RentalImage();
-        rentalImage.setData(rentalImageType.getData());
-        rentalImage.setName(rentalImageType.getName());
-        rentalImage.setMime(rentalImageType.getMime());
-        rentalImage.setSize(rentalImageType.getSize());
-        rentalImage.setCreatedAt(LocalDateTime.now());
-        rentalImage.setUpdatedAt(LocalDateTime.now());
-        rentalImage.setBinaryIdentification(UUID.randomUUID().toString());
-
-        return rentalImage;
     }
 
     public List<TransportationAccess> toTransportationAccess(List<TransportationAccessType> transportationAccessTypeList) {
@@ -128,34 +111,15 @@ public class RentalSpaceMapper {
         return location;
     }
 
-    public List<RentalSpaceResultType> toRentalSpaceResultType(List<RentalSpaceDBType> rentalSpaceResults, List<RentalImage> rentalImages) {
+    public List<RentalSpaceResultType> toRentalSpaceResultType(List<RentalSpaceDBType> rentalSpaceResults) {
 
-        List<RentalSpaceResultType> rentalSpaceResultTypeList = rentalSpaceResults.stream().map(this::toRentalSpaceResultType).toList();
-        Iterator<RentalImage> rentalImageIterator = rentalImages.iterator();
-        return rentalSpaceResultTypeList.stream().map(rentalSpaceResultType -> addRentalSpaceImageType(rentalSpaceResultType, rentalImageIterator.next())).toList();
-    }
-
-    private RentalSpaceResultType addRentalSpaceImageType(RentalSpaceResultType rentalSpaceResultType, RentalImage rentalImage) {
-
-        rentalSpaceResultType.setRentalImage(toRentalImageType(rentalImage));
-        return rentalSpaceResultType;
-    }
-
-    private RentalImageType toRentalImageType(RentalImage rentalImage) {
-
-        RentalImageType rentalImageType = new RentalImageType();
-        rentalImageType.setData(rentalImage.getData());
-        rentalImageType.setName(rentalImage.getName());
-        rentalImageType.setMime(rentalImage.getMime());
-        rentalImageType.setSize(rentalImage.getSize());
-        rentalImageType.setBinaryIdentification(rentalImage.getBinaryIdentification());
-
-        return rentalImageType;
+        return rentalSpaceResults.stream().map(this::toRentalSpaceResultType).toList();
     }
 
     public RentalSpaceResultType toRentalSpaceResultType(RentalSpaceDBType rentalSpaceResult) {
 
         RentalSpaceResultType rentalSpaceResultType = new RentalSpaceResultType();
+        rentalSpaceResultType.setRentalImageIdentification(rentalSpaceResult.getRentalImageIdentification());
         rentalSpaceResultType.setRent(rentalSpaceResult.getRent());
         rentalSpaceResultType.setRoomType(RoomContentType.fromValue(rentalSpaceResult.getRoomType()));
         rentalSpaceResultType.setNoOfBeds(rentalSpaceResult.getNoOfBeds());
@@ -250,30 +214,5 @@ public class RentalSpaceMapper {
         amenitiesType.setElevator(amenities.getElevator());
 
         return amenitiesType;
-    }
-
-    public RetrieveRentalImagesRespMsgType toRetrieveRentalImagesRespMsgType(RentalSpace rentalSpace) {
-
-        RetrieveRentalImagesRespMsgType rentalImagesRespMsgType = new RetrieveRentalImagesRespMsgType();
-        rentalImagesRespMsgType.getRentalImages().addAll(toRentalImageTypes(rentalSpace.getRentalImages()));
-        rentalImagesRespMsgType.setTotalResults(rentalSpace.getRentalImages().size());
-
-        return rentalImagesRespMsgType;
-    }
-
-    private List<RentalImageType> toRentalImageTypes(List<RentalImage> rentalImages) {
-
-        return rentalImages.stream().map(this::toRentalImageType).toList();
-    }
-
-    private RentalImageType toRentalImageTypes(RentalImage rentalImage) {
-
-        RentalImageType rentalImageType = new RentalImageType();
-        rentalImageType.setData(rentalImage.getData());
-        rentalImageType.setName(rentalImage.getName());
-        rentalImageType.setMime(rentalImage.getMime());
-        rentalImageType.setSize(rentalImage.getSize());
-
-        return rentalImageType;
     }
 }

@@ -89,7 +89,10 @@ export class AuthService {
   retrieveUserInfo(): Observable<RetrieveUserInfoRespMsgType> {
     return this.http.post<RetrieveUserInfoRespMsgType>(environment.auth.retrieveUserInfo, null)
       .pipe(
-        tap((res) => localStorage.setItem('ROLE', res.role))
+        tap((res) => {
+          localStorage.setItem('ROLE', res.role);
+          this.updateShell.emit();
+        })
       );
   }
 }

@@ -64,11 +64,12 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-
   register() {
     const payload = (this.registerForm.value as RegisterReqMsgType);
     payload.avatar = this.avatar;
-    payload.avatar.data = Utils.removeDataURL(payload.avatar.data.slice());
+    if (payload.avatar) {
+      payload.avatar.data = Utils.removeDataURL(payload.avatar.data.slice());
+    }
     this.authService.register(payload);
   }
 }

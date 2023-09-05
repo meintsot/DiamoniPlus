@@ -4,13 +4,10 @@ import com.tedi.dto.AmenitiesType;
 import com.tedi.dto.MyRentalSpacesReqMsgType;
 import com.tedi.dto.RentalSpaceDBType;
 import com.tedi.dto.SearchRentalSpacesReqMsgType;
-import com.tedi.model.RentalImage;
+import com.tedi.model.ImageFile;
 import com.tedi.model.RentalSpace;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +22,10 @@ public class RentalSpaceDao {
 
     public void saveRentalSpace(RentalSpace rentalSpace) {
         em.persist(rentalSpace);
+    }
+
+    public void saveRentalImage(ImageFile rentalImage) {
+        em.persist(rentalImage);
     }
 
     public List<RentalSpaceDBType> searchRentalSpaces(SearchRentalSpacesReqMsgType param) {
@@ -52,7 +53,7 @@ public class RentalSpaceDao {
         }
 
         nativeQuery.append("FROM rental_space rs ");
-        nativeQuery.append("LEFT JOIN rental_image ri ON ri.rental_space_id = rs.id ");
+        nativeQuery.append("LEFT JOIN image_file ri ON ri.rental_space_id = rs.id ");
         nativeQuery.append("LEFT JOIN location l ON l.rental_space_id = rs.id ");
         nativeQuery.append("WHERE 1=1 ");
 
@@ -149,7 +150,7 @@ public class RentalSpaceDao {
         }
 
         // Adding the filter for the rental image
-        nativeQuery.append("AND ri.id = (SELECT MIN(ri2.id) FROM rental_image ri2 WHERE ri2.rental_space_id = rs.id) ");
+        nativeQuery.append("AND ri.id = (SELECT MIN(ri2.id) FROM image_file ri2 WHERE ri2.rental_space_id = rs.id) ");
 
         nativeQuery.append("order by rs.rent");
 
@@ -173,12 +174,6 @@ public class RentalSpaceDao {
         return query;
     }
 
-    public List<RentalImage> retrieveRentalImages(List<String> binaryIdentifications) {
-
-        return em.createNamedQuery("RentalImage.findByBinaryIdentificationIn", RentalImage.class)
-                .setParameter("binaryIdentifications", binaryIdentifications).getResultList();
-    }
-
     public Optional<RentalSpace> retrieveRentalSpaceDetails(String rentalSpaceReference) {
         try {
             Query q = em.createNamedQuery("RentalSpace.findByRentalSpaceReferenceWithAvailableRentPeriods", RentalSpace.class)
@@ -189,51 +184,65 @@ public class RentalSpaceDao {
         }
     }
 
-    public void deleteRentalImage(String binaryIdentification) {
-        em.createQuery("delete from RentalImage ri where ri.binaryIdentification = :binaryIdentification")
-                .setParameter("binaryIdentification", binaryIdentification)
-                .executeUpdate();
+    public Optional<ImageFile> retrieveRentalImage(String rentalSpaceReference, String binaryIdentification) {
+        try {
+            TypedQuery<ImageFile> query = em.createQuery(
+                            "select ri from RentalSpace r join r.rentalImages ri " +
+                                    "where r.rentalSpaceReference = :rentalSpaceReference " +
+                                    "and ri.binaryIdentification = :binaryIdentification",
+                            ImageFile.class)
+                    .setParameter("rentalSpaceReference", rentalSpaceReference)
+                    .setParameter("binaryIdentification", binaryIdentification);
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
-    public boolean isRentalImageOfHost(String user, String rentalSpaceReference, String binaryIdentification) {
+    public List<ImageFile> retrieveRentalImages(List<String> binaryIdentifications) {
         return em.createQuery(
-                "select (count(ri) > 0) from RentalSpace r " +
-                        "join r.rentalImages ri " +
-                        "join r.host h " +
-                        "where r.rentalSpaceReference = :rentalSpaceReference and h.username = :user " +
-                        "and ri.binaryIdentification = :binaryIdentification", Boolean.class
-        ).setParameter("rentalSpaceReference", rentalSpaceReference).setParameter("user", user)
-                .setParameter("binaryIdentification", binaryIdentification).getSingleResult();
+                "select ri from ImageFile ri " +
+                        "where ri.binaryIdentification in :binaryIdentifications ", ImageFile.class)
+                .setParameter("binaryIdentifications", binaryIdentifications)
+                .getResultList();
+    }
+
+    public boolean deleteRentalImage(String binaryIdentification) {
+        int rowsDeleted = em.createQuery("delete from ImageFile ri where ri.binaryIdentification = :binaryIdentification")
+                .setParameter("binaryIdentification", binaryIdentification)
+                .executeUpdate();
+
+        return rowsDeleted > 0;
     }
 
     public Query myRentalSpaces(MyRentalSpacesReqMsgType param, String user, boolean isCount) {
-
         StringBuilder nativeQuery = new StringBuilder();
 
         // Constructing the native SQL query
         if (!isCount) {
             nativeQuery.append(
-                    "SELECT ri.binary_identification as binary_identification, " +
+                    "SELECT rs.rental_space_reference as rental_space_reference, " +
+                            "MIN(ri.binary_identification) as binary_identification, " +
                             "rs.rent as rent, rs.room_type as room_type, rs.no_of_beds as no_of_beds, " +
-                            "rs.total_reviews as total_reviews, rs.average_reviews as average_reviews," +
-                            "rs.rental_space_reference as rental_space_reference "
+                            "rs.total_reviews as total_reviews, rs.average_reviews as average_reviews FROM rental_space rs "
             );
+            nativeQuery.append("LEFT JOIN image_file ri ON ri.rental_space_id = rs.id ");
+            nativeQuery.append("LEFT JOIN location l ON l.rental_space_id = rs.id ");
         } else {
-            nativeQuery.append("SELECT count(distinct rs.id) ");
+            nativeQuery.append("SELECT COUNT(distinct rs.id) FROM rental_space rs ");
         }
 
-        nativeQuery.append("FROM rental_space rs ");
-        nativeQuery.append("LEFT JOIN rental_image ri ON ri.rental_space_id = rs.id ");
-        nativeQuery.append("LEFT JOIN location l ON l.rental_space_id = rs.id ");
         nativeQuery.append("LEFT JOIN diamoni_plus_user u ON u.id = rs.host_id ");
-        nativeQuery.append("WHERE u.username=:user ");
+        nativeQuery.append("WHERE u.username = :user ");
 
-        // Adding the filter for the rental image
-        nativeQuery.append("AND ri.id = (SELECT MIN(ri2.id) FROM rental_image ri2 WHERE ri2.rental_space_id = rs.id) ");
+        // Adjusted filter for the rental image using a subquery
+        if (!isCount) {
+            nativeQuery.append("AND ri.id = (SELECT MIN(ri2.id) FROM image_file ri2 WHERE ri2.id = ri.id) ");
+            nativeQuery.append("GROUP BY rs.rental_space_reference, rs.rent, rs.room_type, rs.no_of_beds, rs.total_reviews, rs.average_reviews ");
+            nativeQuery.append("ORDER BY rs.rent");
+        }
 
-        nativeQuery.append("order by rs.rent");
-
-        // Set the result class to the native query to map the results to RentalSpaceDBType
+        // Create the native SQL query
         Query query;
 
         if (!isCount) {
@@ -250,6 +259,7 @@ public class RentalSpaceDao {
 
         return query;
     }
+
 
     public List<RentalSpaceDBType> myRentalSpaces(MyRentalSpacesReqMsgType param, String user) {
         return (List<RentalSpaceDBType>) myRentalSpaces(param, user, false).getResultList();

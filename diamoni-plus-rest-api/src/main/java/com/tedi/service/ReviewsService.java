@@ -39,6 +39,7 @@ public class ReviewsService {
     @Inject
     ReviewsDao reviewsDao;
 
+//    TODO add exception(s) for submitting only one review for a rental space or a user
     public void submitReview(SubmitReviewReqMsgType param) throws ValidationFault {
 
         reviewsValidator.validateMissingHostUsernameAndBookingReference(param);

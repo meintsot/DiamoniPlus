@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "image_file")
 public class ImageFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

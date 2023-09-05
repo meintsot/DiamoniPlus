@@ -23,7 +23,7 @@ public class CreateRentalSpaceReqMsgType {
     private List<RentalSpaceDateRangeType> availableRentPeriods;
     private LocationType location;
     private List<TransportationAccessType> transportationAccess;
-    private List<RentalImageType> rentalImages;
+    private List<String> rentalImageIdentifications;
 
     public String getTitle() {
         return title;
@@ -177,11 +177,11 @@ public class CreateRentalSpaceReqMsgType {
         this.transportationAccess = transportationAccess;
     }
 
-    public List<RentalImageType> getRentalImages() {
-        return rentalImages;
+    public List<String> getRentalImageIdentifications() {
+        return rentalImageIdentifications;
     }
 
-    public void setRentalImages(List<RentalImageType> rentalImages) {
-        this.rentalImages = rentalImages;
+    public void setRentalImageIdentifications(List<String> rentalImageIdentifications) {
+        this.rentalImageIdentifications = rentalImageIdentifications;
     }
 }

@@ -2,7 +2,7 @@ package com.tedi.dto;
 
 public class RentalSpaceResultType {
 
-    private RentalImageType rentalImage;
+    private String rentalImageIdentification;
     private Double rent;
     private RoomContentType roomType;
     private Integer noOfBeds;
@@ -10,12 +10,12 @@ public class RentalSpaceResultType {
     private Double averageReviews;
     private String rentalSpaceReference;
 
-    public RentalImageType getRentalImage() {
-        return rentalImage;
+    public String getRentalImageIdentification() {
+        return rentalImageIdentification;
     }
 
-    public void setRentalImage(RentalImageType rentalImage) {
-        this.rentalImage = rentalImage;
+    public void setRentalImageIdentification(String rentalImageIdentification) {
+        this.rentalImageIdentification = rentalImageIdentification;
     }
 
     public Double getRent() {
