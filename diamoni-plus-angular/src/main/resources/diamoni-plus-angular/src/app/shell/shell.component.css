@@ -1,0 +1,23 @@
+.shell-header {
+  margin-bottom: 20px;
+}
+
+.shell-content {
+  min-height: calc(100vh - 100px);
+  padding: 20px;
+}
+
+.shell-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+div[clickable]:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.full-viewport {
+  height: 100vh;
+}
+

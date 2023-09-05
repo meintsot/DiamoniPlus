@@ -11,7 +11,6 @@ public enum ErrorMessageType {
     DATA_02_AuthService("Email must be unique."),
     DATA_03_AuthService("Invalid username or password."),
     DATA_04_AuthService("Invalid password for the current user."),
-
     DATA_05_AuthService("Invalid JWT credentials."),
 
     MESS_01_RentalSpaceService("Space area must be larger than 20 sq.m."),

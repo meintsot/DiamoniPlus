@@ -47,4 +47,12 @@ public class AuthResource {
     public void changePassword(ChangePasswordReqMsgType param) throws ValidationFault {
         authService.changePassword(param);
     }
+
+    @POST
+    @Path("/retrieve_user_info")
+    @RolesAllowed({Roles.ADMIN, Roles.HOST, Roles.TENANT})
+    @Produces(MediaType.APPLICATION_JSON)
+    public RetrieveUserInfoRespMsgType retrieveUserInfo() throws ValidationFault {
+        return authService.retrieveUserInfo();
+    }
 }

@@ -5,11 +5,17 @@ import com.tedi.dto.RegisterReqMsgType;
 import com.tedi.model.DiamoniPlusUser;
 import com.tedi.model.RoleType;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 @ApplicationScoped
 public class DiamoniPlusUserMapper {
+
+    @Inject
+    ImageFileMapper imageFileMapper;
 
     public DiamoniPlusUser toDiamoniPlusUser(RegisterReqMsgType param) {
 
@@ -21,7 +27,7 @@ public class DiamoniPlusUserMapper {
         diamoniPlusUser.setEmail(param.getEmail());
         diamoniPlusUser.setPhone(param.getPhone());
         diamoniPlusUser.setRoleType(RoleType.fromValue(param.getDesiredRole()));
-        diamoniPlusUser.setAvatar(param.getAvatar());
+        diamoniPlusUser.setAvatar(imageFileMapper.toImageFile(param.getAvatar()));
         diamoniPlusUser.setCreatedAt(LocalDateTime.now());
         diamoniPlusUser.setUpdatedAt(LocalDateTime.now());
 

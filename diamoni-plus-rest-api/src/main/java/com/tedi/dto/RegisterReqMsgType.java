@@ -18,7 +18,7 @@ public class RegisterReqMsgType {
 
     private String desiredRole;
 
-    private String avatar;
+    private ImageFileType avatar;
 
     public String getUsername() {
         return username;
@@ -84,11 +84,11 @@ public class RegisterReqMsgType {
         this.desiredRole = desiredRole;
     }
 
-    public String getAvatar() {
+    public ImageFileType getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(ImageFileType avatar) {
         this.avatar = avatar;
     }
 }

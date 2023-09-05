@@ -1,0 +1,29 @@
+.avatar-label {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+div[clickable]:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.p-dropdown {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex-grow: 1;
+}
+
+.p-inputgroup > .p-dropdown > div {
+  width: 100% !important;
+}
+
+.p-inputgroup > p-dropdown {
+  flex: 1 1 auto !important;
+}

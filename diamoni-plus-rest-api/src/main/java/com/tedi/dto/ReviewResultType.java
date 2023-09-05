@@ -5,7 +5,7 @@ public class ReviewResultType {
     private Double rating;
     private String description;
     private String author;
-    private String authorImage;
+    private ImageFileType authorImage;
 
     public Double getRating() {
         return rating;
@@ -31,11 +31,11 @@ public class ReviewResultType {
         this.author = author;
     }
 
-    public String getAuthorImage() {
+    public ImageFileType getAuthorImage() {
         return authorImage;
     }
 
-    public void setAuthorImage(String authorImage) {
+    public void setAuthorImage(ImageFileType authorImage) {
         this.authorImage = authorImage;
     }
 }
