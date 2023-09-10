@@ -56,33 +56,33 @@ public class RentalSpaceResource {
     }
 
     @GET
-    @Path("/{rentalSpaceReference}/images")
+    @Path("/{rentalSpaceReference}/images/{binaryIdentification}")
     @Produces(MediaType.APPLICATION_JSON)
-    public RetrieveRentalImagesRespMsgType retrieveRentalImages(
-            @PathParam("rentalSpaceReference") String rentalSpaceReference
+    public RetrieveRentalImageRespMsgType retrieveRentalImage(
+            @PathParam("rentalSpaceReference") String rentalSpaceReference,
+            @PathParam("binaryIdentification") String binaryIdentification
     ) throws ValidationFault {
-        return rentalSpaceService.retrieveRentalImages(rentalSpaceReference);
+        return rentalSpaceService.retrieveRentalImage(rentalSpaceReference, binaryIdentification);
     }
 
-    @PUT
+    @POST
     @Path("/images")
     @RolesAllowed(Roles.HOST)
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void addRentalImage(AddRentalImageReqMsgType param) throws ValidationFault {
-        rentalSpaceService.addRentalImage(param);
+    public UploadRentalImageRespMsgType uploadRentalImage(UploadRentalImageReqMsgType param) throws ValidationFault {
+        return rentalSpaceService.uploadRentalImage(param);
     }
 
     @DELETE
-    @Path("/{rentalSpaceReference}/images/{binaryIdentification}")
+    @Path("/images/{binaryIdentification}")
     @RolesAllowed(Roles.HOST)
     @Transactional
     public void deleteRentalImage(
-            @PathParam("rentalSpaceReference") String rentalSpaceReference,
             @PathParam("binaryIdentification") String binaryIdentification
     ) throws ValidationFault {
-        rentalSpaceService.deleteRentalImage(rentalSpaceReference, binaryIdentification);
+        rentalSpaceService.deleteRentalImage(binaryIdentification);
     }
 
     @GET

@@ -21,6 +21,20 @@ import {CardModule} from "primeng/card";
 import {ChipsModule} from "primeng/chips";
 import {FileUploadModule} from "primeng/fileupload";
 import {DropdownModule} from "primeng/dropdown";
+import { MyRentalSpacesComponent } from './my-rental-spaces/my-rental-spaces.component';
+import { RentalSpaceResultsComponent } from './shared/rental-space-results/rental-space-results.component';
+import {TableModule} from "primeng/table";
+import { SubmitRentalSpaceComponent } from './submit-rental-space/submit-rental-space.component';
+import {CheckboxModule} from "primeng/checkbox";
+import {CalendarModule} from "primeng/calendar";
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {PaginatorModule} from "primeng/paginator";
+import {FieldsetModule} from "primeng/fieldset";
+import {StepsModule} from "primeng/steps";
+import {LeafletModule} from "@asymmetrik/ngx-leaflet";
+import {CommonModule, DatePipe} from "@angular/common";
+import {RatingModule} from "primeng/rating";
+import {DataViewModule} from "primeng/dataview";
 
 @NgModule({
   declarations: [
@@ -28,8 +42,12 @@ import {DropdownModule} from "primeng/dropdown";
     ShellComponent,
     LoginComponent,
     RegisterComponent,
+    MyRentalSpacesComponent,
+    RentalSpaceResultsComponent,
+    SubmitRentalSpaceComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     MenubarModule,
@@ -44,9 +62,20 @@ import {DropdownModule} from "primeng/dropdown";
     CardModule,
     ChipsModule,
     FileUploadModule,
-    DropdownModule
+    DropdownModule,
+    TableModule,
+    CheckboxModule,
+    CalendarModule,
+    InputTextareaModule,
+    PaginatorModule,
+    FieldsetModule,
+    StepsModule,
+    LeafletModule,
+    RatingModule,
+    DataViewModule
   ],
   providers: [
+    DatePipe,
     MessageService,
     {
       provide: HTTP_INTERCEPTORS,

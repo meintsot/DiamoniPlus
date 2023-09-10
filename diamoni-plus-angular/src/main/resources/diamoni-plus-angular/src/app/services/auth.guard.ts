@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean {
     // Implement your logic here to check if user is authenticated
-    if (1!==1) {
+    if (localStorage.getItem('JSESSION_ID')) {
       return true;
     } else {
       this.router.navigate(['/login']);

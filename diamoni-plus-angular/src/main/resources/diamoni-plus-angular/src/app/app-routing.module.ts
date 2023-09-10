@@ -4,6 +4,8 @@ import {AuthGuard} from './services/auth.guard';
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {LogoutGuard} from "./services/logout.guard";
+import {MyRentalSpacesComponent} from "./my-rental-spaces/my-rental-spaces.component";
+import {SubmitRentalSpaceComponent} from "./submit-rental-space/submit-rental-space.component";
 
 const routes: Routes = [
   {
@@ -18,12 +20,17 @@ const routes: Routes = [
     path: 'logout',
     canActivate: [LogoutGuard],
     component: LoginComponent
+  },
+  {
+    path: 'my-rental-spaces',
+    component: MyRentalSpacesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'submit-rental-space',
+    component: SubmitRentalSpaceComponent,
+    canActivate: [AuthGuard]
   }
-  // {
-  //   path: 'protected-route',
-  //   component: ProtectedComponent,
-  //   canActivate: [AuthGuard] // This route is protected
-  // },
   // ...other routes
 ];
 

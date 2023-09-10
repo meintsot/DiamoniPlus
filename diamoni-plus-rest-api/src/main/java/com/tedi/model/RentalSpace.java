@@ -119,12 +119,12 @@ public class RentalSpace {
     @OneToMany(mappedBy = "rentalSpace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
-    @OneToOne(mappedBy = "rentalSpace", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    private Location location;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "rental_space_id")
-    private List<RentalImage> rentalImages = new ArrayList<>();
+    private List<ImageFile> rentalImages = new ArrayList<>();
+
+    @OneToOne(mappedBy = "rentalSpace", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    private Location location;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "rental_space_id")
@@ -142,6 +142,14 @@ public class RentalSpace {
     @Version
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
+
+    public List<ImageFile> getRentalImages() {
+        return rentalImages;
+    }
+
+    public void setRentalImages(List<ImageFile> rentalImages) {
+        this.rentalImages = rentalImages;
+    }
 
     public Long getId() {
         return id;
@@ -325,14 +333,6 @@ public class RentalSpace {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public List<RentalImage> getRentalImages() {
-        return rentalImages;
-    }
-
-    public void setRentalImages(List<RentalImage> rentalImages) {
-        this.rentalImages = rentalImages;
     }
 
     public List<TransportationAccess> getTransportationAccess() {

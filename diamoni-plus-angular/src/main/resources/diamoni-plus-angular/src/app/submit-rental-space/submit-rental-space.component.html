@@ -1,0 +1,347 @@
+<div class="d-flex justify-content-center">
+  <p-card header="Add a New Rental Space ">
+    <form [formGroup]="submitRentalSpaceForm" (ngSubmit)="submitForm()">
+      <div class="mb-4">
+        <p-steps [model]="items" [readonly]="false" [activeIndex]="activeIndex"
+                 (activeIndexChange)="activeIndexChange($event)"></p-steps>
+      </div>
+
+      <p-fieldset *ngIf="activeIndex === 0">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center text-primary">
+            <span class="pi pi-home p-2 pt-0 pb-0" style="font-size: 2rem"></span>
+            <span class="font-bold text-lg">{{ titles[activeIndex] }}</span>
+          </div>
+        </ng-template>
+        <!-- Title -->
+        <div class="p-2">
+          <label for="title" class="d-block fw-bold">Title</label>
+          <input class="w-100" id="title" pInputText type="text" formControlName="title" />
+        </div>
+
+        <!-- Description -->
+        <div class="p-2">
+          <label for="description" class="d-block fw-bold">Description</label>
+          <textarea class="w-100" formControlName="description" pInputTextarea id="description" rows="5" required></textarea>
+        </div>
+
+        <!-- Room Type -->
+        <div class="p-2">
+          <label for="roomType" class="d-block fw-bold">Room Type</label>
+          <div class="p-inputgroup">
+            <p-dropdown formControlName="roomType" id="roomType" [options]="roomTypeOptions"></p-dropdown>
+          </div>
+        </div>
+      </p-fieldset>
+
+      <p-fieldset *ngIf="activeIndex === 1">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center text-primary">
+            <span class="pi pi-home p-2 pt-0 pb-0" style="font-size: 2rem"></span>
+            <span class="font-bold text-lg">{{ titles[activeIndex] }}</span>
+          </div>
+        </ng-template>
+        <!-- Number of Bedrooms -->
+        <div class="p-2">
+          <label for="bedrooms" class="d-block fw-bold">Number of Bedrooms</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="noOfBedrooms" class="w-100" id="bedrooms"></p-inputNumber>
+          </div>
+        </div>
+
+        <!-- Maximum Number of People Allowed -->
+        <div class="p-2">
+          <label for="maxPeople" class="d-block fw-bold">Max people limit</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="maxNumOfPeople" class="w-100" id="maxPeople"></p-inputNumber>
+          </div>
+        </div>
+
+        <!-- Number of Beds -->
+        <div class="p-2">
+          <label for="beds" class="d-block fw-bold">Number of Beds</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="noOfBeds" class="w-100" id="beds"></p-inputNumber>
+          </div>
+        </div>
+
+        <!-- Number of Bathrooms -->
+        <div class="p-2">
+          <label for="bathrooms" class="d-block fw-bold">Number of Bathrooms</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="noOfBathrooms" class="w-100" id="bathrooms"></p-inputNumber>
+          </div>
+        </div>
+
+        <!-- Has Living Room -->
+        <div class="p-2 row">
+          <label for="livingRoom" class="fw-bold col">Has Living Room</label>
+          <p-checkbox [binary]="true" class="col-9" formControlName="hasLivingRoom" id="livingRoom"></p-checkbox>
+        </div>
+
+        <!-- Area -->
+        <div class="p-2">
+          <label for="area" class="d-block fw-bold">Area (in sq. ft.)</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="area" class="w-100" id="area"></p-inputNumber>
+          </div>
+        </div>
+
+        <!-- Smoking Allowed -->
+        <div class="p-2 row">
+          <label for="smokingAllowed" class="fw-bold col">Smoking Allowed</label>
+          <p-checkbox [binary]="true" class="col-9" formControlName="smokingAllowed" id="smokingAllowed"></p-checkbox>
+        </div>
+
+        <!-- Pets Allowed -->
+        <div class="p-2 row">
+          <label for="petsAllowed" class="fw-bold col">Pets Allowed</label>
+          <p-checkbox [binary]="true" class="col-9" formControlName="petsAllowed" id="petsAllowed"></p-checkbox>
+        </div>
+
+        <!-- Events Allowed -->
+        <div class="p-2 row">
+          <label for="eventsAllowed" class="fw-bold col">Events Allowed</label>
+          <p-checkbox [binary]="true" class="col-9" formControlName="eventsAllowed" id="eventsAllowed"></p-checkbox>
+        </div>
+
+        <!-- Minimum Duration (to Stay) -->
+        <div class="p-2">
+          <label for="minDuration" class="d-block fw-bold">Minimum Duration (to Stay)</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="minDuration" class="w-100" id="minDuration"></p-inputNumber>
+          </div>
+        </div>
+
+        <!-- Rent -->
+        <div class="p-2">
+          <label for="rent" class="d-block fw-bold">Rent (per month)</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="rent" class="w-100" id="rent"></p-inputNumber>
+          </div>
+        </div>
+
+        <!-- Additional Rent per Person -->
+        <div class="p-2">
+          <label for="additionalRent" class="d-block fw-bold">Additional Rent per Person (per month)</label>
+          <div class="p-inputgroup">
+            <p-inputNumber formControlName="additionalRentPerPerson" class="w-100" id="additionalRent"></p-inputNumber>
+          </div>
+        </div>
+      </p-fieldset>
+
+      <p-fieldset *ngIf="activeIndex === 2">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center text-primary">
+            <span class="pi pi-home p-2 pt-0 pb-0" style="font-size: 2rem"></span>
+            <span class="font-bold text-lg">{{ titles[activeIndex] }}</span>
+          </div>
+        </ng-template>
+        <!-- Amenities -->
+        <div class="p-2" formGroupName="amenities">
+          <legend>Amenities</legend>
+          <div class="d-flex justify-content-around">
+            <div class="p-2 p-col-6 p-inputgroup">
+              <label for="wirelessInternet" class="p-2">Wireless Internet</label>
+              <p-checkbox [binary]="true" id="wirelessInternet" name="wirelessInternet"></p-checkbox>
+            </div>
+            <div class="p-2 p-col-6 p-inputgroup">
+              <label for="cooling" class="p-2">Cooling</label>
+              <p-checkbox [binary]="true" id="cooling" name="cooling"></p-checkbox>
+            </div>
+            <div class="p-2 p-col-6 p-inputgroup">
+              <label for="heating" class="p-2">Heating</label>
+              <p-checkbox [binary]="true" id="heating" name="heating"></p-checkbox>
+            </div>
+            <div class="p-2 p-col-6 p-inputgroup">
+              <label for="kitchen" class="p-2">Kitchen</label>
+              <p-checkbox [binary]="true" id="kitchen" name="kitchen"></p-checkbox>
+            </div>
+            <div class="p-2 p-col-6 p-inputgroup">
+              <label for="television" class="p-2">Television</label>
+              <p-checkbox [binary]="true" id="television" name="television"></p-checkbox>
+            </div>
+            <div class="p-2 p-col-6 p-inputgroup">
+              <label for="parkingSpace" class="p-2">Parking Space</label>
+              <p-checkbox [binary]="true" id="parkingSpace" name="parkingSpace"></p-checkbox>
+            </div>
+            <div class="p-2 p-col-6 p-inputgroup">
+              <label for="elevator" class="p-2">Elevator</label>
+              <p-checkbox [binary]="true" id="elevator" name="elevator"></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-fieldset>
+
+      <p-fieldset *ngIf="activeIndex === 3">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center text-primary">
+            <span class="pi pi-home p-2 pt-0 pb-0" style="font-size: 2rem"></span>
+            <span class="font-bold text-lg">{{ titles[activeIndex] }}</span>
+          </div>
+        </ng-template>
+        <!-- Available Rent Periods -->
+        <div class="d-flex justify-content-between p-2">
+          <h3>Available Rent Periods</h3>
+          <div class="pi pi-plus" style="font-size: 2.5rem; color: white; background-color: blue; border-radius: 100%"
+               (click)="addRentPeriod()"></div>
+        </div>
+        <div *ngFor="let rentPeriod of submitRentalSpaceForm.get('availableRentPeriods').controls let index = index">
+          <div class="d-flex justify-content-around align-items-center mt-2">
+            <div>Start Date:</div>
+            <p-calendar
+              id="startDate"
+              [showIcon]="true"
+              [showButtonBar]="true"
+              (onSelect)="assignStartDate(rentPeriod, $event)"
+            ></p-calendar>
+
+            <div>End Date:</div>
+            <p-calendar
+              id="endDate"
+              [showIcon]="true"
+              [showButtonBar]="true"
+              (onSelect)="assignEndDate(rentPeriod, $event)"
+            ></p-calendar>
+            <div (click)="removeAvailableRentPeriod(index)">
+              <i class="pi pi-times" style="color: white; background-color: red; border-radius: 100%; font-size: 1.5rem"></i>
+            </div>
+          </div>
+        </div>
+      </p-fieldset>
+
+      <p-fieldset *ngIf="activeIndex === 4" formGroupName="location">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center text-primary">
+            <span class="pi pi-home p-2 pt-0 pb-0" style="font-size: 2rem"></span>
+            <span class="font-bold text-lg">{{ titles[activeIndex] }}</span>
+          </div>
+        </ng-template>
+        <!-- Location (Using OpenStreetMap) -->
+        <h3 class="p-2">Location</h3>
+        <div class="map" leaflet [leafletOptions]="options" (leafletClick)="onLocationSet($event)"></div>
+        <!-- Country -->
+        <div class="p-2">
+          <label for="country" class="d-block fw-bold">Country</label>
+          <div class="p-inputgroup">
+            <input type="text" id="country" pInputText formControlName="country" />
+          </div>
+        </div>
+        <!-- City -->
+        <div class="p-2">
+          <label for="city" class="d-block fw-bold">City</label>
+          <div class="p-inputgroup">
+            <input type="text" id="city" pInputText formControlName="city" />
+          </div>
+        </div>
+        <!-- Address -->
+        <div class="p-2">
+          <label for="address" class="d-block fw-bold">Address</label>
+          <div class="p-inputgroup">
+            <input type="text" id="address" formControlName="address" pInputText />
+          </div>
+        </div>
+        <!-- Suburb -->
+        <div class="p-2">
+          <label for="suburb" class="d-block fw-bold">Suburb</label>
+          <div class="p-inputgroup">
+            <input type="text" id="suburb" formControlName="suburb" pInputText />
+          </div>
+        </div>
+        <!-- Postcode -->
+        <div class="p-2">
+          <label for="postcode" class="d-block fw-bold">Postcode</label>
+          <div class="p-inputgroup">
+            <input type="text" id="postcode" formControlName="postcode" pInputText />
+          </div>
+        </div>
+        <!-- Latitude -->
+        <div class="p-2">
+          <label for="latitude" class="d-block fw-bold">Latitude</label>
+          <div class="p-inputgroup">
+            <p-inputNumber class="w-100" id="latitude" formControlName="latitude"></p-inputNumber>
+          </div>
+        </div>
+        <!-- Longitude -->
+        <div class="p-2">
+          <label for="longitude" class="d-block fw-bold">Longitude</label>
+          <div class="p-inputgroup">
+            <p-inputNumber class="w-100" id="longitude" formControlName="longitude"></p-inputNumber>
+          </div>
+        </div>
+      </p-fieldset>
+
+      <p-fieldset *ngIf="activeIndex === 5">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center text-primary">
+            <span class="pi pi-home p-2 pt-0 pb-0" style="font-size: 2rem"></span>
+            <span class="font-bold text-lg">{{ titles[activeIndex] }}</span>
+          </div>
+        </ng-template>
+        <!-- Transportation Access (Using OpenStreetMap) -->
+        <h3 class="p-2">Transportation Access</h3>
+        <div class="map" leaflet [leafletOptions]="options" (leafletClick)="addTransportationAccess($event)"></div>
+        <!-- Transportation Access List -->
+        <div class="scrollable-div">
+          <div *ngFor="let transportationAccessGroup of submitRentalSpaceForm.get('transportationAccess').controls; let index = index"
+               class="d-flex justify-content-around align-items-center mt-3">
+            <!-- Create a FormGroup for each item -->
+            <ng-container [formGroup]="transportationAccessGroup">
+              <label for="transportationName">Transportation Name</label>
+              <input pInputText id="transportationName" type="text" formControlName="transportationName">
+
+              <label for="transportationType">Transportation Type</label>
+              <p-dropdown appendTo="body" id="transportationType" [options]="transportationTypeOptions" formControlName="transportationType"></p-dropdown>
+
+              <div (click)="removeTransportationAccess(index)">
+                <i class="pi pi-times" style="color: white; background-color: red; border-radius: 100%"></i>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </p-fieldset>
+
+      <p-fieldset *ngIf="activeIndex === 6">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center text-primary">
+            <span class="pi pi-home p-2 pt-0 pb-0" style="font-size: 2rem"></span>
+            <span class="font-bold text-lg">{{ titles[activeIndex] }}</span>
+          </div>
+        </ng-template>
+        <div class="text-center">
+          <div clickable>
+            <label for="avatarUpload" class="avatar-label">
+              <span>
+                <i class="pi pi-images" style="font-size: 4rem"></i>
+              </span>
+            </label>
+            <input type="file" id="avatarUpload" accept="image/*" (change)="onUpload($event)" style="display: none;">
+          </div>
+        </div>
+        <div class="d-flex justify-content-center scrollable-div">
+          <div class="image-item" *ngFor="let image of uploadedImages; let i = index">
+            <img [src]="image" alt="Uploaded Image" style="width: 100px; height: 100px">
+            <button class="delete-button" (click)="deleteImage(i)">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        </div>
+      </p-fieldset>
+
+      <div class="d-flex justify-content-between mt-4">
+        <div class="justify-content-start">
+          <p-button *ngIf="activeIndex !== 0" label="Previous" icon="pi pi-angle-left"
+                    (onClick)="activeIndex = activeIndex - 1"></p-button>
+        </div>
+        <div class="justify-content-end">
+          <p-button *ngIf="activeIndex !== 6" label="Next" icon="pi pi-angle-right" iconPos="right"
+                    (onClick)="activeIndex = activeIndex + 1"></p-button>
+        </div>
+        <!-- Submit Button -->
+        <button *ngIf="activeIndex === 6" pButton type="submit" icon="pi pi-check" class="p-button-success">
+          Submit
+        </button>
+      </div>
+    </form>
+  </p-card>
+</div>

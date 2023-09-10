@@ -1,0 +1,56 @@
+<p-card class="custom-card">
+  <div class="p-grid">
+    <div class="p-col">
+      <h1>My Rental Spaces</h1>
+    </div>
+    <div class="p-col">
+      <button pButton type="button" icon="pi pi-plus" class="p-button-success" (click)="redirectToRentalSpaceFormPage()">
+        Add a New Rental Space
+      </button>
+    </div>
+  </div>
+  <div class="p-grid">
+    <div class="p-col-6">
+      <div class="p-grid p-justify-between">
+        <div class="p-col">
+          <!-- This empty div is for spacing -->
+        </div>
+      </div>
+    </div>
+    <div class="p-col-6" style="text-align: right;">
+      <span class="p-badge">{{ rentalSpaces.length }} Total Results</span>
+    </div>
+  </div>
+  <p-dataView [value]="rentalSpaces" class="p-dataview p-dataview-list">
+    <ng-template let-rentalSpace let-index="index" pTemplate="listItem">
+      <div class="p-dataview-item row">
+        <div class="col-3">
+          <img class="p-dataview-image" [src]="imageUrls[index]" [alt]="rentalSpace.roomType" />
+        </div>
+        <div class="col-8">
+          <h4 class="mb-2">{{ rentalSpace.roomType }}</h4>
+          <div class="d-flex mb-2">
+            <div class="p-2">
+              <i class="pi pi-dollar"></i> {{ rentalSpace.rent }}
+            </div>
+            <div class="p-2">
+              <i class="pi pi-users"></i> {{ rentalSpace.noOfBeds }} Beds
+            </div>
+            <div class="p-2">
+              <i class="pi pi-star"></i> {{ rentalSpace.totalReviews }} Reviews
+            </div>
+          </div>
+          <div class="p-2">
+            <p-rating [(ngModel)]="rentalSpace.averageReviews" [readonly]="true" [cancel]="false"></p-rating>
+          </div>
+        </div>
+        <div class="col d-flex align-items-center">
+<!--          TODO make to navigate to details page-->
+          <span>
+            <i class="pi pi-eye cursor-pointer" style="font-size: 2rem"></i>
+        </span>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataView>
+</p-card>

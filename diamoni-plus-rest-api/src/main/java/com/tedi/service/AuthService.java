@@ -118,7 +118,9 @@ public class AuthService {
         response.setRole(userService.getRole());
         response.setFirstName(diamoniPlusUser.getFirstName());
         response.setLastName(diamoniPlusUser.getLastName());
-        response.setAvatar(imageFileMapper.toImageFileType(diamoniPlusUser.getAvatar()));
+        if (Objects.nonNull(diamoniPlusUser.getAvatar())) {
+            response.setAvatar(imageFileMapper.toImageFileType(diamoniPlusUser.getAvatar()));
+        }
 
         return response;
     }

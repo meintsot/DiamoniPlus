@@ -32,6 +32,7 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.init();
+    this.authService.updateShell.subscribe(() => this.init());
   }
 
   init() {
@@ -45,18 +46,16 @@ export class ShellComponent implements OnInit, OnDestroy {
         if (this.userInfo?.avatar) {
           this.avatarUrl = Utils.createDataUrl(this.userInfo.avatar);
         }
-        console.log(this.avatarUrl);
+        this.initItems();
       });
-
-    this.authService.updateShell.subscribe(() => this.init());
-
-    this.initItems();
   }
 
   initItems() {
     this.items = [
       { label: 'Search Rental Spaces', icon: 'pi pi-fw pi-search', url: '/' }
     ];
+    console.log(this.isLoggedIn);
+    console.log(this.userInfo);
     if (this.isLoggedIn) {
       const role = this.userInfo?.role;
       if (role == 'host') {
