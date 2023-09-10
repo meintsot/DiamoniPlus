@@ -1,10 +1,11 @@
 package com.tedi.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RetrieveReviewsRespMsgType {
 
-    private List<ReviewResultType> reviewResults;
+    private List<ReviewResultType> reviewResults = new ArrayList<>();
     private Double averageReviews;
 
     public List<ReviewResultType> getReviewResults() {

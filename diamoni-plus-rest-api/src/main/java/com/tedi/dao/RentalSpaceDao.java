@@ -176,7 +176,7 @@ public class RentalSpaceDao {
 
     public Optional<RentalSpace> retrieveRentalSpaceDetails(String rentalSpaceReference) {
         try {
-            Query q = em.createNamedQuery("RentalSpace.findByRentalSpaceReferenceWithAvailableRentPeriods", RentalSpace.class)
+            Query q = em.createNamedQuery("RentalSpace.findByRentalSpaceReference", RentalSpace.class)
                     .setParameter("rentalSpaceReference", rentalSpaceReference);
             return Optional.of((RentalSpace) q.getSingleResult());
         } catch (NoResultException e) {

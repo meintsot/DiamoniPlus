@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../services/auth.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoginReqMsgType} from "../model";
 
@@ -13,8 +13,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private formBuilder: FormBuilder,
-    private changeDetectorRef: ChangeDetectorRef
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -26,6 +25,5 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.authService.login((this.loginForm.value as LoginReqMsgType));
-    this.changeDetectorRef.detectChanges();
   }
 }

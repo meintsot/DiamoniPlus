@@ -9,6 +9,12 @@ export const environment = {
     myRentalSpaces: '/api/rental-spaces/host',
     uploadRentalImage: '/api/rental-spaces/images',
     deleteRentalImage: '/api/rental-spaces/images/:binaryIdentification',
-    createRentalSpace: '/api/rental-spaces'
+    common: '/api/rental-spaces',
+    rentalSpaceDetails: '/api/rental-spaces/:rentalSpaceReference'
+  },
+  reviews: '/api/reviews',
+  booking: {
+    common: '/api/booking',
+    delete: '/api/booking/:bookingReference'
   }
 };

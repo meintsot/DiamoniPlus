@@ -1,15 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {RentalSpaceResultType} from "../model";
+import {BookingService} from "../services/booking.service";
 import {RentalSpaceService} from "../services/rental-space.service";
-import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-my-rental-spaces',
-  templateUrl: './my-rental-spaces.component.html',
-  styleUrls: ['./my-rental-spaces.component.css']
+  selector: 'app-my-bookings',
+  templateUrl: './my-bookings.component.html',
+  styleUrls: ['./my-bookings.component.css']
 })
-export class MyRentalSpacesComponent implements OnInit {
-
+export class MyBookingsComponent implements OnInit {
   rentalSpaces: RentalSpaceResultType[] = [];
 
   imageUrls: string[] = [];
@@ -21,7 +20,7 @@ export class MyRentalSpacesComponent implements OnInit {
 
   constructor(
     private rentalSpaceService: RentalSpaceService,
-    private router: Router
+    private bookingService: BookingService
   ) {}
 
   ngOnInit(): void {
@@ -29,16 +28,12 @@ export class MyRentalSpacesComponent implements OnInit {
   }
 
   loadMyRentalSpaces() {
-    this.rentalSpaceService.myRentalSpaces({page: this.page, pageSize: this.pageSize})
+    this.bookingService.myBookings({page: this.page, pageSize: this.pageSize})
       .subscribe(res => {
         this.handleRentalImages(res.rentalSpaceResults);
         this.rentalSpaces = res.rentalSpaceResults;
         this.totalResults = res.totalResults;
       });
-  }
-
-  redirectToRentalSpaceFormPage() {
-    this.router.navigate(['submit-rental-space']);
   }
 
   private handleRentalImages(rentalSpaceResults: RentalSpaceResultType[]) {

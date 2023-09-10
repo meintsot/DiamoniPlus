@@ -1,0 +1,118 @@
+<p-card class="custom-card">
+  <div class="p-grid">
+    <div class="p-col">
+      <h1>Search Rental Spaces</h1>
+    </div>
+  </div>
+  <!-- filters -->
+  <form [formGroup]="filterForm"  (ngSubmit)="searchRentalSpaces()">
+    <div class="row mt-2" formGroupName="location">
+      <div class="col">
+        <input formControlName="country" pInputText placeholder="Country" />
+      </div>
+      <div class="col">
+        <input formControlName="city" pInputText placeholder="City" />
+      </div>
+      <div class="col">
+        <input formControlName="address" pInputText placeholder="Address" />
+      </div>
+      <div class="col">
+        <input formControlName="suburb" pInputText placeholder="Suburb" />
+      </div>
+      <div class="col">
+        <input formControlName="postcode" pInputText placeholder="Postcode" />
+      </div>
+    </div>
+    <p-divider></p-divider>
+    <div class="row mt-2">
+      <div class="col">
+        <label for="startDate">Start Date:</label>
+        <p-calendar
+          #startDate
+          id="startDate"
+          [showIcon]="true"
+          [showButtonBar]="true"
+          (onSelect)="assignStartDate($event)"
+        ></p-calendar>
+      </div>
+      <div class="col">
+        <label for="endDate">End Date:</label>
+        <p-calendar
+          #endDate
+          id="endDate"
+          [showIcon]="true"
+          [showButtonBar]="true"
+          (onSelect)="assignEndDate($event)"
+        ></p-calendar>
+      </div>
+      <div class="col">
+        <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" formControlName="maxNumOfPeople"></p-inputNumber>
+        <label>Max People</label>
+      </span>
+      </div>
+      <div class="col">
+        <p-dropdown [showClear]="true" [options]="roomTypes" formControlName="roomType" placeholder="Select a Room Type"></p-dropdown>
+      </div>
+      <div class="col">
+        <span class="p-float-label">
+        <p-inputNumber inputId="integeronly" formControlName="maximumCost"></p-inputNumber>
+        <label>Maximum Cost</label>
+      </span>
+      </div>
+    </div>
+    <p-divider></p-divider>
+    <div class="row mt-2" formGroupName="amenities">
+      <div class="col">
+        <label for="wirelessInternet" class="fw-bold">Wireless Internet: </label>
+        <p-triStateCheckbox formControlName="wirelessInternet" id="wirelessInternet" />
+      </div>
+      <div class="col">
+        <label for="cooling" class="fw-bold">Cooling: </label>
+        <p-triStateCheckbox formControlName="cooling" id="cooling" />
+      </div>
+      <div class="col">
+        <label for="heating" class="fw-bold">Heating: </label>
+        <p-triStateCheckbox formControlName="heating" id="heating" />
+      </div>
+      <div class="col">
+        <label for="kitchen" class="fw-bold">Kitchen: </label>
+        <p-triStateCheckbox formControlName="kitchen" id="kitchen" />
+      </div>
+      <div class="col">
+        <label for="television" class="fw-bold">Television: </label>
+        <p-triStateCheckbox formControlName="television" id="television" />
+      </div>
+      <div class="col">
+        <label for="parkingSpace" class="fw-bold">Parking Space: </label>
+        <p-triStateCheckbox formControlName="parkingSpace" id="parkingSpace" />
+      </div>
+      <div class="col">
+        <label for="elevator" class="fw-bold">Elevator: </label>
+        <p-triStateCheckbox formControlName="elevator" id="elevator" />
+      </div>
+    </div>
+    <p-divider></p-divider>
+  </form>
+  <div class="p-grid">
+    <div class="p-col-1">
+      <p-button label="Reset Filters" icon="pi pi-times" [disabled]="resetFiltersDisabled" (onClick)="clearFilters()"></p-button>
+    </div>
+    <div class="p-col-5">
+      <div class="p-grid p-justify-between">
+        <div class="p-col">
+          <!-- This empty div is for spacing -->
+        </div>
+      </div>
+    </div>
+    <div class="p-col-6" style="text-align: right;">
+      <span class="p-badge">{{ totalResults }} Total Results</span>
+    </div>
+  </div>
+  <app-rental-space-results
+    [rentalSpaces]="rentalSpaces"
+    [imageUrls]="imageUrls"
+    [totalResults]="totalResults"
+    (pageChange)="onPageChange($event)"
+  ></app-rental-space-results>
+</p-card>

@@ -7,7 +7,7 @@ import {DatePipe} from "@angular/common";
 import {RentalSpaceService} from "../services/rental-space.service";
 import {Utils} from "../Utils";
 import {InfoService} from "../services/info.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-submit-rental-space',
@@ -21,17 +21,19 @@ export class SubmitRentalSpaceComponent implements OnInit {
   activeIndex = 1;
   items!: MenuItem[];
   titles!: string[];
-  options!: Leaflet.MapOptions
+  options!: Leaflet.MapOptions;
   locationMarker!: Leaflet.Marker;
   transportationAccessMarkers: Leaflet.Marker[] = [];
   uploadedImages: string[] = [];
+  isEdit = false;
 
   constructor(
     private fb: FormBuilder,
     private datePipe: DatePipe,
     private rentalSpaceService: RentalSpaceService,
     private infoService: InfoService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -40,6 +42,17 @@ export class SubmitRentalSpaceComponent implements OnInit {
     this.initItems();
     this.initForm();
     this.initMap();
+    this.checkIfEdit();
+  }
+
+  private checkIfEdit() {
+    const rentalSpaceReference = this.route.snapshot.queryParams['rentalSpaceReference'];
+    if (!Utils.isStringBlank(rentalSpaceReference)) {
+      this.rentalSpaceService.retrieveRentalSpaceDetails(rentalSpaceReference).subscribe(res => {
+        this.submitRentalSpaceForm.patchValue(res);
+        this.isEdit = true;
+      })
+    }
   }
 
   private initMap() {

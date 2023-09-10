@@ -4,9 +4,3 @@
   margin: 0 auto; /* Center the card horizontally */
   padding: 10px; /* Add padding for spacing */
 }
-
-/* Media query for screens larger than 768px (adjust as needed) */
-@media screen and (min-width: 768px) {
-  width: 50%; /* Reduce width for larger screens */
-  max-width: none; /* Remove the maximum width */
-}

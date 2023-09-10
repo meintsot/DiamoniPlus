@@ -13,6 +13,14 @@ export class Utils {
   }
 
   static createDataUrl(imageFile: ImageFileType): string {
-    return 'data:' + imageFile.mime + ';' + this.PRECEDING_DATA + imageFile.data;
+    return `data:${imageFile.mime};${this.PRECEDING_DATA}${imageFile.data}`;
+  }
+
+  static isNullOrUndefined(value: any) {
+    return value === null || value === undefined;
+  }
+
+  static isStringBlank(value: string | null) {
+    return this.isNullOrUndefined(value) || value === '';
   }
 }
