@@ -13,6 +13,8 @@ public enum ErrorMessageType {
     DATA_04_AuthService("Invalid password for the current user."),
     DATA_05_AuthService("Invalid JWT credentials."),
 
+    DATA_01_ProfileService("User not found."),
+
     MESS_01_RentalSpaceService("Space area must be larger than 20 sq.m."),
     MESS_02_RentalSpaceService("Host is not approved by administration."),
     MESS_03_RentalSpaceService("Rental space does not belong to this user."),
