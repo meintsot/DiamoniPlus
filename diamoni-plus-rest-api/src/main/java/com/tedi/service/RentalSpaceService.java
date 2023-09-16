@@ -1,6 +1,8 @@
 package com.tedi.service;
 
+import com.mysql.cj.util.StringUtils;
 import com.tedi.auth.UserService;
+import com.tedi.dao.BookingDao;
 import com.tedi.dao.DiamoniPlusUserDao;
 import com.tedi.dao.RentalSpaceDao;
 import com.tedi.dto.*;
@@ -31,6 +33,9 @@ public class RentalSpaceService {
 
     @Inject
     RentalSpaceDao rentalSpaceDao;
+
+    @Inject
+    BookingDao bookingDao;
 
     @Inject
     RentalSpaceMapper rentalSpaceMapper;
@@ -81,7 +86,19 @@ public class RentalSpaceService {
         RentalSpace rentalSpace = rentalSpaceDao.retrieveRentalSpaceDetails(rentalSpaceReference).orElseThrow(
                 () -> new ValidationFault(ErrorMessageType.DATA_02_RentalSpaceService)
         );
-        return rentalSpaceMapper.toRetrieveRentalSpaceDetailsRespMsgType(rentalSpace);
+
+        RetrieveRentalSpaceDetailsRespMsgType response = rentalSpaceMapper.toRetrieveRentalSpaceDetailsRespMsgType(rentalSpace);
+
+        if (!StringUtils.isNullOrEmpty(userService.getUser())) {
+            Booking booking = bookingDao.findByTenantUsernameAndRentalSpaceReference(userService.getUser(), rentalSpaceReference)
+                    .orElse(null);
+            if (Objects.nonNull(booking)) {
+                response.setBookingReference(booking.getBookingReference());
+                response.setBookedDateRange(rentalSpaceMapper.toRentalSpaceDateRangeType(booking.getBookingDateRange()));
+            }
+        }
+
+        return response;
     }
 
     public void updateRentalSpaceDetails(UpdateRentalSpaceDetailsReqMsgType param) throws ValidationFault {

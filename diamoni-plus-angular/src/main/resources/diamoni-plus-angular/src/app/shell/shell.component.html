@@ -1,21 +1,23 @@
 <!-- Navigation Bar -->
 <div class="shell-header">
-  <p-menubar [model]="items">
+  <p-menubar [model]="items" *ngIf="!isLoggedIn">
     <!-- ... other code ... -->
-    <ng-template pTemplate="end" *ngIf="isLoggedIn && !avatarUrl">
-      <div clickable (click)="navigateToProfile()">
-        <p-avatar label="{{fullNameAcronym}}" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="end" *ngIf="!isLoggedIn">
-      <div clickable (click)="navigateToProfile()">
-        <p-avatar *ngIf="userInfo" (click)="navigateToProfile()" image="https://i.stack.imgur.com/l60Hf.png"
+    <ng-template pTemplate="end">
+      <div>
+        <p-avatar image="https://i.stack.imgur.com/l60Hf.png"
                   styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
       </div>
     </ng-template>
-    <ng-template pTemplate="end" *ngIf="isLoggedIn && avatarUrl">
-      <div clickable (click)="navigateToProfile()">
-        <p-avatar *ngIf="userInfo" (click)="navigateToProfile()" image="{{avatarUrl}}"
+  </p-menubar>
+
+  <p-menubar [model]="items" *ngIf="isLoggedIn">
+    <!-- ... other code ... -->
+    <ng-template pTemplate="end">
+      <div *ngIf="!avatarUrl" clickable (click)="navigateToProfile()">
+        <p-avatar label="{{fullNameAcronym}}" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+      </div>
+      <div *ngIf="avatarUrl" clickable (click)="navigateToProfile()">
+        <p-avatar (click)="navigateToProfile()" image="{{avatarUrl}}"
                   styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
       </div>
     </ng-template>

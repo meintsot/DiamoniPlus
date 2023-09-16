@@ -28,6 +28,9 @@ public class RetrieveRentalSpaceDetailsRespMsgType {
     private List<TransportationAccessType> transportationAccess = new ArrayList<>();
     private String rentalSpaceReference;
     private String host;
+    private List<String> rentalImageIdentifications = new ArrayList<>();
+    private String bookingReference;
+    private RentalSpaceDateRangeType bookedDateRange;
 
     public String getTitle() {
         return title;
@@ -211,5 +214,29 @@ public class RetrieveRentalSpaceDetailsRespMsgType {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public List<String> getRentalImageIdentifications() {
+        return rentalImageIdentifications;
+    }
+
+    public void setRentalImageIdentifications(List<String> rentalImageIdentifications) {
+        this.rentalImageIdentifications = rentalImageIdentifications;
+    }
+
+    public String getBookingReference() {
+        return bookingReference;
+    }
+
+    public void setBookingReference(String bookingReference) {
+        this.bookingReference = bookingReference;
+    }
+
+    public RentalSpaceDateRangeType getBookedDateRange() {
+        return bookedDateRange;
+    }
+
+    public void setBookedDateRange(RentalSpaceDateRangeType bookedDateRange) {
+        this.bookedDateRange = bookedDateRange;
     }
 }

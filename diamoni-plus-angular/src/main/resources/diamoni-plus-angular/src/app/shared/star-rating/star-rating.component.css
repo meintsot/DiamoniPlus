@@ -1,0 +1,22 @@
+.star-rating {
+  font-size: 24px;
+}
+
+.star {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.filled-star {
+  color: gold;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.empty-star {
+  color: grey;
+  z-index: 0;
+}

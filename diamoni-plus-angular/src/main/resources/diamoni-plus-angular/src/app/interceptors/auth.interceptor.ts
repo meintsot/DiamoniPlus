@@ -1,10 +1,5 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor, HttpErrorResponse
-} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 import {LogoutService} from "../services/logout.service";
 
@@ -31,7 +26,6 @@ export class AuthInterceptor implements HttpInterceptor {
     // solve circular import
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.log(error.status);
         if (error.status === 401) {
           // Perform logout and other related actions
           this.logoutService.logout();

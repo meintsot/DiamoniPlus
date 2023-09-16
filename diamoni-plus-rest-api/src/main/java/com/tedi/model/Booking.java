@@ -2,24 +2,18 @@ package com.tedi.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "Booking.findByBookingReference", query = "select b from Booking b where b.bookingReference = :bookingReference")
+        @NamedQuery(name = "Booking.findByBookingReference", query = "select b from Booking b where b.bookingReference = :bookingReference"),
+        @NamedQuery(name = "Booking.findByTenant_UsernameAndRentalSpace_RentalSpaceReference", query = "select b from Booking b where b.tenant.username = :username and b.rentalSpace.rentalSpaceReference = :rentalSpaceReference")
 })
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
-
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
 
     @Column(name = "booking_reference", nullable = false)
     private String bookingReference;
@@ -35,6 +29,10 @@ public class Booking {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "rental_space_id", nullable = false)
     private RentalSpace rentalSpace;
+
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @JoinColumn(name = "booking_date_range_id", nullable = false)
+    private RentalSpaceDateRange bookingDateRange;
 
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private Review review;
@@ -55,22 +53,6 @@ public class Booking {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
     }
 
     public String getBookingReference() {
@@ -103,6 +85,14 @@ public class Booking {
 
     public void setRentalSpace(RentalSpace rentalSpace) {
         this.rentalSpace = rentalSpace;
+    }
+
+    public RentalSpaceDateRange getBookingDateRange() {
+        return bookingDateRange;
+    }
+
+    public void setBookingDateRange(RentalSpaceDateRange bookingDateRange) {
+        this.bookingDateRange = bookingDateRange;
     }
 
     public Review getReview() {

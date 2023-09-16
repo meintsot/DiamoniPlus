@@ -32,21 +32,27 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.init();
-    this.authService.updateShell.subscribe(() => this.init());
   }
 
   init() {
+    this.initItems();
     this.authService.isAuthenticated$.pipe(takeUntil(this.destroy))
-      .subscribe(isAuthenticated => this.isLoggedIn = isAuthenticated);
-
-    this.authService.profileData$.pipe(takeUntil(this.destroy))
-      .subscribe(profileData => {
-        this.userInfo = profileData;
-        this.fullNameAcronym = profileData.firstName.slice(0, 1) + profileData.lastName.slice(0, 1);
-        if (this.userInfo?.avatar) {
-          this.avatarUrl = Utils.createDataUrl(this.userInfo.avatar);
+      .subscribe(isAuthenticated => {
+        if (isAuthenticated) {
+          this.authService.retrieveUserInfo().pipe(takeUntil(this.destroy)).subscribe(profileData => {
+            if (profileData) {
+              this.userInfo = profileData;
+              this.fullNameAcronym = profileData.firstName.slice(0, 1) + profileData.lastName.slice(0, 1);
+              if (this.userInfo?.avatar) {
+                this.avatarUrl = Utils.createDataUrl(this.userInfo.avatar);
+              }
+              this.isLoggedIn = true;
+              this.initItems();
+            } else {
+              this.isLoggedIn = false;
+            }
+          });
         }
-        this.initItems();
       });
   }
 
@@ -54,9 +60,8 @@ export class ShellComponent implements OnInit, OnDestroy {
     this.items = [
       { label: 'Search Rental Spaces', icon: 'pi pi-fw pi-search', url: '/' }
     ];
-    console.log(this.isLoggedIn);
-    console.log(this.userInfo);
     if (this.isLoggedIn) {
+      this.items.push({ label: 'Discussions', icon: 'pi pi-fw pi-comments', url: '/discussions' });
       const role = this.userInfo?.role;
       if (role == 'host') {
         this.items.push({ label: 'My Rental Spaces', icon: 'pi pi-fw pi-building', url: '/my-rental-spaces' });
@@ -65,10 +70,8 @@ export class ShellComponent implements OnInit, OnDestroy {
       } else if (role === 'admin') {
         this.items.push({ label: 'Manage Users', icon: 'pi pi-fw pi-users', url: '/manage-users' });
       }
-      this.items.push({ label: 'Discussions', icon: 'pi pi-fw pi-comments', url: '/discussions' });
       this.items.push({ label: 'Logout', icon: 'pi pi-fw pi-sign-out', url: '/logout' });
     } else {
-      this.items.push({ label: 'Discussions', icon: 'pi pi-fw pi-comments', url: '/discussions' });
       this.items.push({ label: 'Login', icon: 'pi pi-fw pi-sign-in', url: '/login' });
       this.items.push({ label: 'Register', icon: 'pi pi-fw pi-user-plus', url: '/register' });
     }

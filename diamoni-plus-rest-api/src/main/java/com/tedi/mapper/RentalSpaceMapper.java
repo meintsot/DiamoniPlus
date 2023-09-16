@@ -149,13 +149,19 @@ public class RentalSpaceMapper {
         response.setRent(rentalSpace.getRent());
         response.setAdditionalRentPerPerson(rentalSpace.getAdditionalRentPerPerson());
         response.setAmenities(toAmenitiesType(rentalSpace.getAmenities()));
-        response.getAvailableRentPeriods().addAll(toRentalSpaceDateRangeType(rentalSpace.getAvailableRentPeriods()));
+        response.getAvailableRentPeriods().addAll(
+                toRentalSpaceDateRangeType(
+                        rentalSpace.getAvailableRentPeriods().stream().filter(RentalSpaceDateRange::getAvailable).toList()
+                )
+        );
         response.setAverageReviews(rentalSpace.getAverageReviews());
         response.setTotalReviews(rentalSpace.getTotalReviews());
         response.setLocation(toLocationType(rentalSpace.getLocation()));
         response.getTransportationAccess().addAll(toTransportationAccessType(rentalSpace.getTransportationAccess()));
         response.setRentalSpaceReference(rentalSpace.getRentalSpaceReference());
         response.setHost(rentalSpace.getHost().getUsername());
+        response.getRentalImageIdentifications().addAll(rentalSpace.getRentalImages()
+                .stream().map(ImageFile::getBinaryIdentification).toList());
 
         return response;
     }
@@ -193,7 +199,7 @@ public class RentalSpaceMapper {
         return rentalSpaceDateRangeList.stream().map(this::toRentalSpaceDateRangeType).toList();
     }
 
-    private RentalSpaceDateRangeType toRentalSpaceDateRangeType(RentalSpaceDateRange rentalSpaceDateRange) {
+    public RentalSpaceDateRangeType toRentalSpaceDateRangeType(RentalSpaceDateRange rentalSpaceDateRange) {
 
         RentalSpaceDateRangeType rentalSpaceDateRangeType = new RentalSpaceDateRangeType();
         rentalSpaceDateRangeType.setStartDate(DataUtils.fromLocalDateTimeToString(rentalSpaceDateRange.getStartDate()));

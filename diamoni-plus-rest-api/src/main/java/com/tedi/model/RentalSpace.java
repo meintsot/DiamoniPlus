@@ -14,11 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "rental_space")
 @NamedQueries({
-        @NamedQuery(
-                name = "RentalSpace.findByRentalSpaceReferenceWithAvailableRentPeriods",
-                query = "select distinct r from RentalSpace r join fetch r.availableRentPeriods p " +
-                        "where r.rentalSpaceReference = :rentalSpaceReference and p.isAvailable=true"
-        )
+        @NamedQuery(name = "RentalSpace.findByRentalSpaceReference", query = "select r from RentalSpace r where r.rentalSpaceReference = :rentalSpaceReference")
 })
 @SqlResultSetMapping(
         name = "RentalSpaceDBTypeMapping",

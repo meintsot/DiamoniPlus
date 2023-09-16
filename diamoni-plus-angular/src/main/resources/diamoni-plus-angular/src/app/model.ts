@@ -150,6 +150,8 @@ export interface LocationType {
 export interface TransportationAccessType {
   transportationName: string;
   transportationType: TransportationContentType;
+  latitude: number;
+  longitude: number;
 }
 
 export enum TransportationContentType {
@@ -170,4 +172,91 @@ export interface UploadRentalImageReqMsgType {
 
 export interface UploadRentalImageRespMsgType {
   binaryIdentification: string;
+}
+
+export interface SearchRentalSpacesReqMsgType {
+  location: LocationType;
+  startDate: string;
+  endDate: string;
+  maxNumOfPeople: number;
+  page: number;
+  pageSize: number;
+  roomType: RoomContentType;
+  maximumCost: number;
+  amenities: AmenitiesType;
+}
+
+export interface SearchRentalSpacesRespMsgType {
+  rentalSpaceResults: RentalSpaceResultType[];
+  totalResults: number;
+}
+
+export interface RetrieveRentalSpaceDetailsRespMsgType {
+  title: string;
+  description: string;
+  roomType: RoomContentType;
+  noOfBedrooms: number;
+  maxNumOfPeople: number;
+  noOfBeds: number;
+  noOfBathrooms: number;
+  hasLivingRoom: boolean;
+  area: number;
+  smokingAllowed: boolean;
+  petsAllowed: boolean;
+  eventsAllowed: boolean;
+  minDuration: number;
+  rent: number;
+  additionalRentPerPerson: number;
+  amenities: AmenitiesType;
+  availableRentPeriods: RentalSpaceDateRangeType[];
+  averageReviews: number;
+  totalReviews: number;
+  location: LocationType;
+  transportationAccess: TransportationAccessType[];
+  rentalSpaceReference: string;
+  host: string;
+  rentalImageIdentifications: string[];
+  bookingReference: string;
+  bookedDateRange: RentalSpaceDateRangeType;
+}
+
+export interface RetrieveReviewsReqMsgType {
+  page: number;
+  pageSize: number;
+  username?: string;
+  rentalSpaceReference?: string;
+}
+
+export interface RetrieveReviewsRespMsgType {
+  reviewResults: ReviewResultType[];
+  averageReviews: number;
+}
+
+export interface ReviewResultType {
+  rating: number;
+  description: string;
+  author: string;
+  authorImageIdentification?: string;
+}
+
+export interface SubmitReviewReqMsgType {
+  rating: number,
+  description: string,
+  hostUsername?: string,
+  bookingReference?: string,
+}
+
+export interface ConfirmBookingReqMsgType {
+  rentalSpaceReference: string;
+  bookingRange: RentalSpaceDateRangeType;
+}
+
+export interface MyBookingsReqMsgType {
+  page: number;
+  pageSize: number;
+}
+
+export interface MyBookingsRespMsgType {
+  rentalSpaceResults: RentalSpaceResultType[];
+  totalResults: number;
 }

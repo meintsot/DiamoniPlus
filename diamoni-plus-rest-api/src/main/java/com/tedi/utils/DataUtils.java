@@ -1,5 +1,8 @@
 package com.tedi.utils;
 
+import com.tedi.dto.RentalSpaceDateRangeType;
+import com.tedi.model.RentalSpaceDateRange;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -19,5 +22,17 @@ public class DataUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
         return localDateTime.format(formatter);
+    }
+
+    public static boolean areDatesEqual(String localDateTimeStr, LocalDateTime localDateTime) {
+        return fromLocalDateTimeToString(localDateTime).equals(localDateTimeStr);
+    }
+
+    public static boolean areDateRangesEqual(
+            RentalSpaceDateRangeType rentalSpaceDateRangeType,
+            RentalSpaceDateRange rentalSpaceDateRange
+    ) {
+        return areDatesEqual(rentalSpaceDateRangeType.getStartDate(), rentalSpaceDateRange.getStartDate()) &&
+                areDatesEqual(rentalSpaceDateRangeType.getEndDate(), rentalSpaceDateRange.getEndDate());
     }
 }

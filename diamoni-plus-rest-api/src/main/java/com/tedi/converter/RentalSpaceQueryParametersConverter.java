@@ -14,7 +14,7 @@ public class RentalSpaceQueryParametersConverter {
     private static final Integer DEFAULT_PAGE = 1;
     private static final Integer DEFAULT_PAGE_SIZE = 10;
 
-    private static final String TRUE = "1";
+    private static final String TRUE = "true";
 
     public SearchRentalSpacesReqMsgType convertSearchRentalSpacesParams(UriInfo uriInfo) {
 

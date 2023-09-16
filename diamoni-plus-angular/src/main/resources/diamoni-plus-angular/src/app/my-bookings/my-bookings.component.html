@@ -3,11 +3,7 @@
     <div class="p-col">
       <h1>My Rental Spaces</h1>
     </div>
-    <div class="p-col">
-      <button pButton type="button" icon="pi pi-plus" class="p-button-success" (click)="redirectToRentalSpaceFormPage()">
-        Add a New Rental Space
-      </button>
-    </div>
+    <div class="p-col"></div>
   </div>
   <div class="p-grid">
     <div class="p-col-6">
@@ -25,7 +21,7 @@
     [rentalSpaces]="rentalSpaces"
     [imageUrls]="imageUrls"
     [totalResults]="totalResults"
-    [isHost]="true"
+    [isHost]="false"
     (pageChange)="onPageChange($event)"
   ></app-rental-space-results>
 </p-card>

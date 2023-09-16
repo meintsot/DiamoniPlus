@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center">
-  <p-card header="Add a New Rental Space ">
+  <p-card [header]="(isEdit ? 'Edit rental space' : 'Add a New Rental Space')">
     <form [formGroup]="submitRentalSpaceForm" (ngSubmit)="submitForm()">
       <div class="mb-4">
         <p-steps [model]="items" [readonly]="false" [activeIndex]="activeIndex"

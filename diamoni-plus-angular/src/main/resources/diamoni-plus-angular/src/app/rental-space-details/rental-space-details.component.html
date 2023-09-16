@@ -1,0 +1,248 @@
+<div class="row">
+  <div class="col-2"></div>
+  <div class="col-8" *ngIf="!isLoading">
+    <p-card header="Rental Space Details">
+      <!-- General Information Section -->
+      <p-fieldset legend="General Information">
+        <div class="d-flex justify-content-center mb-4">
+          <h2><u>Title:</u> {{rentalSpaceDetails.title}}</h2>
+        </div>
+        <p-divider/>
+
+        <div class="row mt-4">
+          <!-- Description and Rent Details -->
+          <div class="col-6">
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <textarea id="description" rows="5" class="form-control"
+                        pInputTextarea [disabled]="true"
+                        [value]="rentalSpaceDetails.description">
+              </textarea>
+            </div>
+
+            <!-- Min Duration and Rent -->
+            <div class="form-group">
+              <label for="minDuration">Minimum Duration:</label>
+              <div id="minDuration">{{rentalSpaceDetails.minDuration}} days</div>
+            </div>
+
+            <div class="form-group">
+              <label for="rent">Rent:</label>
+              <div id="rent">{{rentalSpaceDetails.rent}} $</div>
+            </div>
+          </div>
+
+          <!-- Room and Space Details -->
+          <div class="col-6">
+            <div class="d-flex mb-2 justify-content-between">
+              <label for="roomType">Room Type:</label>
+              <div id="roomType">{{rentalSpaceDetails.roomType}}</div>
+            </div>
+            <div class="d-flex mb-2 justify-content-between">
+              <label for="noOfBedrooms">Number Of Bedrooms:</label>
+              <div id="noOfBedrooms">{{rentalSpaceDetails.noOfBedrooms}}</div>
+            </div>
+            <div class="d-flex mb-2 justify-content-between">
+              <label for="maxNumOfPeople">Max People Limit:</label>
+              <div id="maxNumOfPeople">{{rentalSpaceDetails.maxNumOfPeople}}</div>
+            </div>
+            <div class="d-flex mb-2 justify-content-between">
+              <label for="noOfBeds">Number Of Beds:</label>
+              <div id="noOfBeds">{{rentalSpaceDetails.noOfBeds}}</div>
+            </div>
+            <!-- ... Add more fields here -->
+          </div>
+        </div>
+
+        <!-- Amenities Section -->
+        <p-divider/>
+        <p-fieldset legend="Amenities">
+          <div class="row">
+            <div class="col-4" *ngIf="rentalSpaceDetails.amenities.wirelessInternet">
+              <i class="pi pi-wifi"></i> Wireless Internet
+            </div>
+            <div class="col-4" *ngIf="rentalSpaceDetails.amenities.cooling">
+              <i class="fas fa-snowflake"></i> Cooling
+            </div>
+            <div class="col-4" *ngIf="rentalSpaceDetails.amenities.heating">
+              <i class="pi pi-sun"></i> Heating
+            </div>
+            <div class="col-4" *ngIf="rentalSpaceDetails.amenities.kitchen">
+              <i class="fas fa-utensils"></i> Kitchen
+            </div>
+            <div class="col-4" *ngIf="rentalSpaceDetails.amenities.television">
+              <i class="pi pi-desktop"></i> Television
+            </div>
+            <div class="col-4" *ngIf="rentalSpaceDetails.amenities.parkingSpace">
+              <i class="pi pi-car"></i> Parking Space
+            </div>
+            <div class="col-4" *ngIf="rentalSpaceDetails.amenities.elevator">
+              <i class="pi pi-arrow-up"></i> Elevator
+            </div>
+          </div>
+        </p-fieldset>
+
+        <!-- Location Section -->
+        <p-divider/>
+        <p-fieldset legend="Location">
+          <div class="d-flex">
+            <div class="row">
+              <div class="col-12">
+                <i class="pi pi-map-marker"></i>
+                {{rentalSpaceDetails.location.country}}, {{rentalSpaceDetails.location.city}}
+              </div>
+              <div class="col-12 mt-2">
+                <i class="fas fa-map-marker-alt"></i>
+                Address: {{rentalSpaceDetails.location.address}}
+              </div>
+              <div class="col-12 mt-2">
+                <i class="pi pi-home"></i>
+                Suburb: {{rentalSpaceDetails.location.suburb}}
+              </div>
+              <div class="col-12 mt-2">
+                <i class="pi pi-inbox"></i>
+                Postcode: {{rentalSpaceDetails.location.postcode}}
+              </div>
+            </div>
+            <div class="locationMap" leaflet [leafletOptions]="locationMapOptions"></div>
+          </div>
+        </p-fieldset>
+
+        <!-- Transportation Access Section -->
+        <p-divider/>
+        <p-fieldset legend="Transportation Access">
+          <div class="transportationAccessMap" leaflet [leafletOptions]="transportationMapOptions"></div>
+          <p-table [value]="rentalSpaceDetails.transportationAccess">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-transport>
+              <tr>
+                <td>{{transport.transportationName}}</td>
+                <td>{{transport.transportationType}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-fieldset>
+
+        <!-- Availability Section -->
+        <p-divider></p-divider>
+        <p-fieldset legend="Availability">
+          <!-- Button to Open Dialog for Date Range Selection if user is logged in, is a tenant, and the space is available -->
+          <button *ngIf="isLoggedIn && isTenant() && isAvailableForBooking() && !isBooked()" pButton type="button" label="Book Now" (click)="showDialog = true"></button>
+
+          <!-- Disabled Book Now button if user is not logged in -->
+          <button *ngIf="!isLoggedIn" pButton type="button" label="Log in to book" [disabled]="true"></button>
+
+          <!-- Disabled Button for when not available for booking -->
+          <button *ngIf="isLoggedIn && isTenant() && !isAvailableForBooking() && !isBooked()" pButton type="button" label="Not available for booking" [disabled]="true"></button>
+
+          <!-- Cancel Button for when already booked -->
+          <button *ngIf="isLoggedIn && isBooked()" pButton type="button" label="Cancel booking for {{ bookedDateRange }}" (click)="cancelBooking()"></button>
+
+          <!-- Dialog for Date Range Selection -->
+          <p-dialog header="Choose Available Date Range" [(visible)]="showDialog" [modal]="true" [style]="{width: '400px'}">
+            <p-listbox (onChange)="selectDateRange($event)" [options]="availableRentPeriods" optionLabel="range" [style]="{'width':'100%'}"></p-listbox>
+            <button [disabled]="!selectedRentPeriod" pButton type="button" label="Book it!" (click)="submitBooking()"></button>
+          </p-dialog>
+        </p-fieldset>
+
+      </p-fieldset>
+      <!-- Rental Space Images Section -->
+      <p-divider></p-divider>
+      <p-fieldset legend="Rental Space Images">
+        <p-carousel [value]="images" [numVisible]="1" [numScroll]="1" [circular]="true">
+          <ng-template let-image pTemplate="item">
+            <div class="p-grid p-nogutter p-justify-center">
+              <img [src]="image" style="width:100%; height:400px;">
+            </div>
+          </ng-template>
+        </p-carousel>
+      </p-fieldset>
+
+      <!-- User Reviews Section -->
+      <p-divider></p-divider>
+      <p-fieldset legend="User Reviews">
+        <!-- Review submission form -->
+        <div *ngIf="isLoggedIn && !hasSubmittedReview && isRented()">
+          <form [formGroup]="reviewForm">
+            <h3>Submit Your Review</h3>
+            <div class="form-group">
+              <label for="rating">Rating:</label>
+              <!-- Use your custom rating component here -->
+              <p-rating id="rating" formControlName="rating" [cancel]="false"></p-rating>
+            </div>
+            <div class="form-group">
+              <label for="reviewText">Your Review:</label>
+              <textarea id="reviewText" rows="3" class="form-control" pInputTextarea formControlName="description"></textarea>
+            </div>
+            <button pButton type="button" label="Submit Review" (click)="submitReview()"></button>
+          </form>
+        </div>
+
+        <!-- Average Reviews -->
+        <div class="mt-4">
+          <h3>Average Rating</h3>
+          <!-- Use your custom rating component here -->
+          <app-star-rating [rating]="rentalSpaceDetails.averageReviews"></app-star-rating>
+          <p>{{rentalSpaceDetails.averageReviews}} out of 5 stars</p>
+        </div>
+
+        <!-- Existing Reviews -->
+        <div class="mt-4">
+          <h3>Existing Reviews</h3>
+          <div class="review" *ngFor="let review of reviews">
+            <!-- Use your custom rating component here -->
+            <app-star-rating [rating]="review.rating"></app-star-rating>
+            <p>{{review.description}}</p>
+            <hr>
+          </div>
+
+          <!-- Pagination -->
+          <p-paginator [rows]="5" [totalRecords]="rentalSpaceDetails.totalReviews" (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+      </p-fieldset>
+    </p-card>
+  </div>
+  <div class="col-8" *ngIf="isLoading">
+    <p-card>
+      <!-- General Information Section -->
+      <p-fieldset legend="General Information">
+        <p-skeleton width="30%" height="2em"></p-skeleton>
+        <p-skeleton width="100%" height="2em" [style]="{'margin-top':'1em'}"></p-skeleton>
+        <p-skeleton width="100%" height="2em" [style]="{'margin-top':'1em'}"></p-skeleton>
+        <!--... and so on, repeat for each piece of content-->
+      </p-fieldset>
+
+      <!-- Amenities Section -->
+      <p-divider></p-divider>
+      <p-fieldset legend="Amenities">
+        <p-skeleton width="30%" height="2em"></p-skeleton>
+        <p-skeleton width="100%" height="2em" [style]="{'margin-top':'1em'}"></p-skeleton>
+        <!--... and so on-->
+      </p-fieldset>
+
+      <!-- Location Section -->
+      <p-divider></p-divider>
+      <p-fieldset legend="Location">
+        <p-skeleton width="100%" height="6em"></p-skeleton>
+      </p-fieldset>
+
+      <!-- Transportation Access Section -->
+      <p-divider></p-divider>
+      <p-fieldset legend="Transportation Access">
+        <p-skeleton width="100%" height="6em"></p-skeleton>
+      </p-fieldset>
+
+      <!-- Rental Space Images Section -->
+      <p-divider></p-divider>
+      <p-fieldset legend="Rental Space Images">
+        <p-skeleton width="100%" height="10em"></p-skeleton>
+      </p-fieldset>
+    </p-card>
+  </div>
+  <div class="col-2"></div>
+</div>

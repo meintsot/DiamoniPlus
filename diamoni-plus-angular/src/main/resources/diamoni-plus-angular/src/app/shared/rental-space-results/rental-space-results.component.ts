@@ -1,9 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {RentalSpaceResultType} from "../../model";
-import {RentalSpaceService} from "../../services/rental-space.service";
-import {tap} from "rxjs";
-import {Router} from "@angular/router";
-
+import {DataViewPageEvent} from "primeng/dataview";
+import {NavigationExtras, Router} from "@angular/router";
 @Component({
   selector: 'app-rental-space-results',
   templateUrl: './rental-space-results.component.html',
@@ -13,19 +11,17 @@ export class RentalSpaceResultsComponent implements OnInit {
 
   cols: any[] = [];
 
-  rentalSpaces: RentalSpaceResultType[] = [];
+  @Input() rentalSpaces: RentalSpaceResultType[] = [];
 
-  imageUrls: string[] = [];
+  @Input() imageUrls: string[] = [];
 
-  totalResults = 0;
+  @Input() totalResults = 0;
 
-  page = 1;
-  pageSize = 10;
+  @Input() isHost = false;
 
-  constructor(
-    private rentalSpaceService: RentalSpaceService,
-    private router: Router
-  ) {}
+  @Output() pageChange = new EventEmitter<{page: number, pageSize: number}>();
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.cols = [
@@ -36,24 +32,33 @@ export class RentalSpaceResultsComponent implements OnInit {
       {field: 'totalReviews', header: 'Total Reviews'},
       {field: 'averageReviews', header: 'Average Reviews'}
     ];
-    this.loadMyRentalSpaces();
   }
 
-  loadMyRentalSpaces() {
-    this.rentalSpaceService.myRentalSpaces({page: this.page, pageSize: this.pageSize})
-      .subscribe(res => {
-        this.handleRentalImages(res.rentalSpaceResults);
-        this.rentalSpaces = res.rentalSpaceResults;
-        this.totalResults = res.totalResults;
-      });
+  onPageChange($event: DataViewPageEvent) {
+    this.pageChange.emit({page: $event.first, pageSize: $event.rows});
   }
 
-  redirectToRentalSpaceFormPage() {
-    this.router.navigate(['submit-rental-space']);
+  navigateToRentalSpaceDetails(rentalSpace: RentalSpaceResultType) {
+    const queryParams: any = {
+      rentalSpaceReference: rentalSpace.rentalSpaceReference
+    };
+
+    const navigationExtras: NavigationExtras = {
+      queryParams,
+    };
+
+    this.router.navigate(['/rental-space-details'], navigationExtras);
   }
 
-  private handleRentalImages(rentalSpaceResults: RentalSpaceResultType[]) {
-    this.rentalSpaceService.retrieveRentalImages(rentalSpaceResults)
-      .subscribe(res => this.imageUrls = res);
+  navigateToEditRentalSpace(rentalSpace: RentalSpaceResultType) {
+    const queryParams: any = {
+      rentalSpaceReference: rentalSpace.rentalSpaceReference
+    };
+
+    const navigationExtras: NavigationExtras = {
+      queryParams,
+    };
+
+    this.router.navigate(['/submit-rental-space'], navigationExtras);
   }
 }
