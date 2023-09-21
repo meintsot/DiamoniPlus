@@ -45,6 +45,7 @@ import {StarRatingComponent} from './shared/star-rating/star-rating.component';
 import {MyBookingsComponent} from './my-bookings/my-bookings.component';
 import {DialogModule} from "primeng/dialog";
 import {ListboxModule} from "primeng/listbox";
+import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import {ListboxModule} from "primeng/listbox";
     RentalSpaceDetailsComponent,
     StarRatingComponent,
     MyBookingsComponent,
+    EditProfileComponent
   ],
   imports: [
     CommonModule,

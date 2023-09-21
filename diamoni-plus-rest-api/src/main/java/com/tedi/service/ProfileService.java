@@ -11,6 +11,9 @@ import com.tedi.mapper.ProfileMapper;
 import com.tedi.model.DiamoniPlusUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import java.util.Objects;
+
 @ApplicationScoped
 public class ProfileService {
 
@@ -44,6 +47,12 @@ public class ProfileService {
         diamoniPlusUser.setFirstName(param.getFirstName());
         diamoniPlusUser.setLastName(param.getLastName());
         diamoniPlusUser.setPhone(param.getPhone());
-        diamoniPlusUser.setAvatar(imageFileMapper.toImageFile(param.getAvatar()));
+        if (Objects.nonNull(param.getAvatar())) {
+            if (Objects.isNull(param.getAvatar().getBinaryIdentification()) || !param.getAvatar().getBinaryIdentification().equals(diamoniPlusUser.getAvatar().getBinaryIdentification())) {
+                diamoniPlusUser.setAvatar(imageFileMapper.toImageFile(param.getAvatar()));
+            }
+        } else {
+            diamoniPlusUser.setAvatar(null);
+        }
     }
 }

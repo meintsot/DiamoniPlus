@@ -1,4 +1,5 @@
 import {ImageFileType} from "./model";
+import * as _ from 'lodash';
 
 export class Utils {
 
@@ -22,5 +23,14 @@ export class Utils {
 
   static isStringBlank(value: string | null) {
     return this.isNullOrUndefined(value) || value === '';
+  }
+
+  static areObjectsEqual(objA: any, objB: any): boolean {
+    for (const [key, value] of Object.entries(objA)) {
+      if (!_.isEqual(value, objB[key])) {
+        return false;
+      }
+    }
+    return true;
   }
 }
