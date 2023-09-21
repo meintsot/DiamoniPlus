@@ -1,0 +1,62 @@
+<p-card class="d-flex justify-content-center" header="Edit Profile" [style]="{width: '40%'}">
+  <form [formGroup]="editProfileForm" (ngSubmit)="editProfile()">
+    <!-- Avatar upload -->
+    <div class="text-center">
+      <div clickable>
+        <label for="avatarUpload" class="avatar-label">
+          <p-avatar *ngIf="!avatar" label="P" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+          <p-avatar *ngIf="avatar" image="{{avatar}}" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+        </label>
+        <input type="file" id="avatarUpload" accept="image/*" (change)="onUpload($event)" style="display: none;">
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- Other input fields -->
+    <div class="p-inputgroup p-1">
+        <span class="p-inputgroup-addon">
+            <i class="pi pi-user-edit"></i>
+        </span>
+      <input formControlName="firstName" pInputText placeholder="First Name" />
+    </div>
+
+    <div class="p-inputgroup p-1">
+        <span class="p-inputgroup-addon">
+            <i class="pi pi-user-minus"></i>
+        </span>
+      <input formControlName="lastName" pInputText placeholder="Last Name" />
+    </div>
+
+    <div class="p-inputgroup p-1">
+        <span class="p-inputgroup-addon">
+            <i class="pi pi-user"></i>
+        </span>
+      <input formControlName="username" pInputText placeholder="Username" />
+    </div>
+
+    <div class="p-inputgroup p-1">
+        <span class="p-inputgroup-addon">
+            <i class="pi pi-envelope"></i>
+        </span>
+      <input formControlName="email" pInputText placeholder="Email" />
+    </div>
+
+    <div class="p-inputgroup p-1">
+        <span class="p-inputgroup-addon">
+            <i class="pi pi-phone"></i>
+        </span>
+      <input formControlName="phone" pInputText placeholder="Phone" />
+    </div>
+
+    <div class="p-inputgroup p-1">
+        <span class="p-inputgroup-addon">
+            <i class="pi pi-id-card"></i>
+        </span>
+      <p-dropdown [options]="roles" formControlName="desiredRole" placeholder="Choose a role" [style]="{'flex-grow': '1'}"></p-dropdown>
+    </div>
+
+    <!-- Submit button -->
+    <p-button class="d-flex justify-content-end" type="submit" label="Edit Profile" [disabled]="editProfileForm.invalid || isFormTheSame()"></p-button>
+  </form>
+</p-card>

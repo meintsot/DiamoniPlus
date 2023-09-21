@@ -9,6 +9,7 @@ import {SubmitRentalSpaceComponent} from "./submit-rental-space/submit-rental-sp
 import {SearchRentalSpacesComponent} from "./search-rental-spaces/search-rental-spaces.component";
 import {RentalSpaceDetailsComponent} from "./rental-space-details/rental-space-details.component";
 import {MyBookingsComponent} from "./my-bookings/my-bookings.component";
+import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 
 const routes: Routes = [
   {
@@ -45,6 +46,11 @@ const routes: Routes = [
   {
     path: 'my-bookings',
     component: MyBookingsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'edit-profile',
+    component: EditProfileComponent,
     canActivate: [AuthGuard]
   }
 ];

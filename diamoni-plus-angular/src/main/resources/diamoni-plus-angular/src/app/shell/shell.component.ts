@@ -78,7 +78,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   navigateToProfile() {
-    this.router.navigate(["profile"]);
+    this.router.navigate(['edit-profile']);
   }
 
   ngOnDestroy() {

@@ -260,3 +260,20 @@ export interface MyBookingsRespMsgType {
   rentalSpaceResults: RentalSpaceResultType[];
   totalResults: number;
 }
+
+export interface GetUserProfileRespMsgType {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  desiredRole: string;
+  avatar: ImageFileType;
+}
+
+export interface UpdateUserProfileReqMsgType {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  avatar: ImageFileType;
+}

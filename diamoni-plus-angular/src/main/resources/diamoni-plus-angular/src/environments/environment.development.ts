@@ -4,6 +4,10 @@ export const environment = {
     register: '/api/auth/register',
     retrieveUserInfo: '/api/auth/retrieve_user_info'
   },
+  profile: {
+    common: '/api/profiles',
+    getUserProfile: '/api/profiles/:username'
+  },
   rentalSpace: {
     retrieveRentalImage: '/api/rental-spaces/:rentalSpaceReference/images/:binaryIdentification',
     myRentalSpaces: '/api/rental-spaces/host',
