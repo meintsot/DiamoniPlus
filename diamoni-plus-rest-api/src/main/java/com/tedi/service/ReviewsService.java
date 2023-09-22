@@ -3,6 +3,7 @@ package com.tedi.service;
 import com.tedi.auth.UserService;
 import com.tedi.dao.BookingDao;
 import com.tedi.dao.DiamoniPlusUserDao;
+import com.tedi.dao.RentalSpaceDao;
 import com.tedi.dao.ReviewsDao;
 import com.tedi.dto.*;
 import com.tedi.fault.ErrorMessageType;
@@ -10,7 +11,9 @@ import com.tedi.fault.ValidationFault;
 import com.tedi.mapper.ReviewsMapper;
 import com.tedi.model.Booking;
 import com.tedi.model.DiamoniPlusUser;
+import com.tedi.model.RentalSpace;
 import com.tedi.model.Review;
+import com.tedi.utils.DataUtils;
 import com.tedi.validator.ReviewsValidator;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -29,6 +32,9 @@ public class ReviewsService {
 
     @Inject
     DiamoniPlusUserDao diamoniPlusUserDao;
+
+    @Inject
+    RentalSpaceDao rentalSpaceDao;
 
     @Inject
     BookingDao bookingDao;
@@ -66,6 +72,9 @@ public class ReviewsService {
 
         review.setBooking(booking);
         review.setTenant(tenant);
+        RentalSpace rentalSpace = booking.getRentalSpace();
+        rentalSpace.setAverageReviews(DataUtils.calculateAverage(rentalSpace.getAverageReviews(), review.getRating(), rentalSpace.getTotalReviews()));
+        rentalSpace.setTotalReviews(rentalSpace.getTotalReviews() + 1);
         reviewsDao.saveReview(review);
     }
 
@@ -74,6 +83,9 @@ public class ReviewsService {
         DiamoniPlusUser host = diamoniPlusUserDao.findByUsername(hostUsername).orElseThrow(
                 () -> new ValidationFault(ErrorMessageType.DATA_02_ReviewsService)
         );
+
+        host.setAverageReviews(DataUtils.calculateAverage(host.getAverageReviews(), review.getRating(), host.getTotalReviews()));
+        host.setTotalReviews(host.getTotalReviews() + 1);
 
         review.setHost(host);
         review.setTenant(tenant);
@@ -84,6 +96,21 @@ public class ReviewsService {
 
         reviewsValidator.validateEitherHostUsernameOrRentalSpaceReferenceIsRequired(param);
         List<Review> reviews = reviewsDao.retrieveReviews(param);
-        return reviewsMapper.toRetrieveReviewsRespMsgType(reviews);
+
+        RetrieveReviewsRespMsgType response = reviewsMapper.toRetrieveReviewsRespMsgType(reviews);
+
+        if (Objects.nonNull(param.getUsername())) {
+            DiamoniPlusUser diamoniPlusUser = diamoniPlusUserDao.findByUsername(param.getUsername()).orElseThrow(
+                    () -> new ValidationFault(ErrorMessageType.DATA_02_ReviewsService)
+            );
+            response.setAverageReviews(diamoniPlusUser.getAverageReviews());
+        } else {
+            RentalSpace rentalSpace = rentalSpaceDao.retrieveRentalSpaceDetails(param.getRentalSpaceReference()).orElseThrow(
+                    () -> new ValidationFault(ErrorMessageType.DATA_04_ReviewsService)
+            );
+            response.setAverageReviews(rentalSpace.getAverageReviews());
+        }
+
+        return response;
     }
 }

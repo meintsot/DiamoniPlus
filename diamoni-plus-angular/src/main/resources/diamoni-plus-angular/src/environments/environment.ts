@@ -6,7 +6,8 @@ export const environment = {
   },
   profile: {
     common: '/api/profiles',
-    getUserProfile: '/api/profiles/:username'
+    getUserProfile: '/api/profiles/:username',
+    image: '/api/profiles/:username/image'
   },
   rentalSpace: {
     retrieveRentalImage: '/api/rental-spaces/:rentalSpaceReference/images/:binaryIdentification',
@@ -20,5 +21,15 @@ export const environment = {
   booking: {
     common: '/api/booking',
     delete: '/api/booking/:bookingReference'
+  },
+  admin: {
+    host: '/api/admin/host/:username',
+    users: '/api/admin/users',
+    exportApplicationData: '/api/admin/export'
+  },
+  discussions: {
+    create: '/api/discussions/',
+    myDiscussions: '/api/discussions/users',
+    messages: '/api/discussions/messages'
   }
 };

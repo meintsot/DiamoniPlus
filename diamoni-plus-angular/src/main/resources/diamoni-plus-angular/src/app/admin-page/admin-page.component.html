@@ -1,0 +1,91 @@
+<p-card header="Manage Users">
+  <form [formGroup]="filterForm">
+    <div class="row g-3 filters align-items-center">
+      <div class="col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-user"></i>
+          <input id="username" type="text" pInputText formControlName="username" placeholder="Username" />
+        </span>
+      </div>
+      <div class="col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-envelope"></i>
+          <input id="email" type="text" pInputText formControlName="email" placeholder="Email" />
+        </span>
+      </div>
+      <div class="col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-user-plus"></i>
+          <input id="firstName" type="text" pInputText formControlName="firstName" placeholder="First Name" />
+        </span>
+      </div>
+      <div class="col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-user-minus"></i>
+          <input id="lastName" type="text" pInputText formControlName="lastName" placeholder="Last Name" />
+        </span>
+      </div>
+      <div class="col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-phone"></i>
+          <input id="phone" type="text" pInputText formControlName="phone" placeholder="Phone" />
+        </span>
+      </div>
+      <div class="col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-id-card"></i>
+          <input id="roleType" type="text" pInputText formControlName="roleType" placeholder="Role Type" />
+        </span>
+      </div>
+      <div class="col-auto">
+        <div class="d-flex align-items-center">
+          <i class="pi pi-check"></i>
+          <label for="isHostApproved" class="mb-0 ms-2">Host approved:</label>
+          <p-checkbox id="isHostApproved" [binary]="true" formControlName="isHostApproved" class="ms-2"></p-checkbox>
+        </div>
+      </div>
+      <div class="col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-star"></i>
+          <input id="averageReviews" type="number" pInputText formControlName="averageReviews" placeholder="Avg Reviews" />
+        </span>
+      </div>
+    </div>
+  </form>
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <strong>Total Results: </strong>
+      <p-badge value="{{totalUsers}}" severity="info" title="Total Results"></p-badge>
+    </div>
+    <button pButton type="button" label="Export Data" class="btn btn-danger" (click)="exportData()"></button>
+  </div>
+  <p-table [value]="users" [paginator]="true" [rows]="pageSize" [totalRecords]="totalUsers" (onPage)="onPageChange($event)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Avatar</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Phone</th>
+        <th>Role Type</th>
+        <th>Is Host Approved</th>
+        <th>Average Reviews</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+      <tr>
+        <td *ngIf="avatars[rowIndex].length !== 0"><p-avatar (click)="viewProfile(user.username)" [image]="avatars[rowIndex]" shape="circle"></p-avatar></td>
+        <td *ngIf="avatars[rowIndex].length === 0"><p-avatar (click)="viewProfile(user.username)" [label]="user.firstName.slice(0,1) + user.lastName.slice(0,1)" shape="circle"></p-avatar></td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.phone }}</td>
+        <td>{{ user.roleType }}</td>
+        <td>{{ user.isHostApproved }}</td>
+        <td>{{ user.averageReviews }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

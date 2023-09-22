@@ -24,6 +24,16 @@ public class Param {
     public static final String TELEVISION = "television";
     public static final String PARKING_SPACE = "parkingSpace";
     public static final String ELEVATOR = "elevator";
+    public static final String USERNAME = "username";
+    public static final String EMAIL = "email";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String PHONE = "phone";
+    public static final String ROLE_TYPE = "roleType";
+    public static final String IS_HOST_APPROVED = "isHostApproved";
+    public static final String AVERAGE_REVIEWS = "averageReviews";
+    public static final String DISCUSSION_REFERENCE = "discussionReference";
+    public static final String RENTAL_SPACE_REFERENCE = "rentalSpaceReference";
 
     private Param() {}
 }

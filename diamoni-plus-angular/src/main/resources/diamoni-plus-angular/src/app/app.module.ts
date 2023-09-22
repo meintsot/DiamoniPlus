@@ -46,6 +46,11 @@ import {MyBookingsComponent} from './my-bookings/my-bookings.component';
 import {DialogModule} from "primeng/dialog";
 import {ListboxModule} from "primeng/listbox";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
+import { AdminPageComponent } from './admin-page/admin-page.component';
+import { ViewProfileComponent } from './view-profile/view-profile.component';
+import {BadgeModule} from "primeng/badge";
+import { DiscussionsComponent } from './discussions/discussions.component';
+import { DiscussionComponent } from './discussions/discussion/discussion.component';
 
 @NgModule({
   declarations: [
@@ -60,43 +65,48 @@ import {EditProfileComponent} from "./edit-profile/edit-profile.component";
     RentalSpaceDetailsComponent,
     StarRatingComponent,
     MyBookingsComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    AdminPageComponent,
+    ViewProfileComponent,
+    DiscussionsComponent,
+    DiscussionComponent
   ],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    AppRoutingModule,
-    MenubarModule,
-    ButtonModule,
-    HttpClientModule,
-    AvatarModule,
-    ToastModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    PasswordModule,
-    RadioButtonModule,
-    CardModule,
-    ChipsModule,
-    FileUploadModule,
-    DropdownModule,
-    TableModule,
-    CheckboxModule,
-    CalendarModule,
-    InputTextareaModule,
-    PaginatorModule,
-    FieldsetModule,
-    StepsModule,
-    LeafletModule,
-    RatingModule,
-    DataViewModule,
-    DividerModule,
-    TriStateCheckboxModule,
-    CarouselModule,
-    SkeletonModule,
-    NgOptimizedImage,
-    DialogModule,
-    ListboxModule
-  ],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        AppRoutingModule,
+        MenubarModule,
+        ButtonModule,
+        HttpClientModule,
+        AvatarModule,
+        ToastModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        PasswordModule,
+        RadioButtonModule,
+        CardModule,
+        ChipsModule,
+        FileUploadModule,
+        DropdownModule,
+        TableModule,
+        CheckboxModule,
+        CalendarModule,
+        InputTextareaModule,
+        PaginatorModule,
+        FieldsetModule,
+        StepsModule,
+        LeafletModule,
+        RatingModule,
+        DataViewModule,
+        DividerModule,
+        TriStateCheckboxModule,
+        CarouselModule,
+        SkeletonModule,
+        NgOptimizedImage,
+        DialogModule,
+        ListboxModule,
+        BadgeModule
+    ],
   providers: [
     DatePipe,
     MessageService,

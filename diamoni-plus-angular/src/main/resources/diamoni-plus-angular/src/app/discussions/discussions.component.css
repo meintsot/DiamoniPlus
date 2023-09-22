@@ -1,0 +1,42 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.discussion-list-container {
+  background-color: #f8f9fa; /* light grey background */
+  border-right: 1px solid #ddd; /* subtle divider between discussion list and chat */
+}
+
+.chat-item {
+  cursor: pointer;
+}
+
+.chat-card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.chat-card:hover {
+  background-color: #e9ecef; /* light grey for hover effect */
+}
+
+.chat-item-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.avatar {
+  margin-right: 15px;
+}
+
+.info {
+  flex-grow: 1;
+  font-weight: bold;
+}

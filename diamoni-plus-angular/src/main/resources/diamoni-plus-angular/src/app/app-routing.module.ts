@@ -10,6 +10,9 @@ import {SearchRentalSpacesComponent} from "./search-rental-spaces/search-rental-
 import {RentalSpaceDetailsComponent} from "./rental-space-details/rental-space-details.component";
 import {MyBookingsComponent} from "./my-bookings/my-bookings.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
+import {AdminPageComponent} from "./admin-page/admin-page.component";
+import {ViewProfileComponent} from "./view-profile/view-profile.component";
+import {DiscussionsComponent} from "./discussions/discussions.component";
 
 const routes: Routes = [
   {
@@ -51,6 +54,20 @@ const routes: Routes = [
   {
     path: 'edit-profile',
     component: EditProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'view-profile',
+    component: ViewProfileComponent
+  },
+  {
+    path: 'manage-users',
+    component: AdminPageComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'discussions',
+    component: DiscussionsComponent,
     canActivate: [AuthGuard]
   }
 ];

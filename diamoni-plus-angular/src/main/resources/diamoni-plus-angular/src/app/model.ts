@@ -277,3 +277,82 @@ export interface UpdateUserProfileReqMsgType {
   phone: string;
   avatar: ImageFileType;
 }
+
+export interface RetrieveUserProfileImageRespMsgType {
+  avatar: ImageFileType;
+}
+
+export interface RetrieveHostApprovalRespMsgType {
+  approved: boolean;
+}
+
+export interface SearchUserProfilesReqMsgType {
+  page: number;
+  pageSize: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  roleType: string;
+  isHostApproved: boolean;
+  averageReviews: number;
+}
+
+export interface SearchUserProfilesRespMsgType {
+  userProfileResults: UserProfileResult[];
+  totalResults: number;
+}
+
+export interface UserProfileResult {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  roleType: string;
+  isHostApproved: boolean;
+  averageReviews: number;
+  avatarIdentification: string;
+}
+
+export interface CreateAndRetrieveDiscussionReqMsgType {
+  hostUsername: string;
+}
+
+export interface CreateAndRetrieveDiscussionRespMsgType {
+  discussionReference: string;
+}
+
+export interface RetrieveDiscussionsRespMsgType {
+  discussions: DiscussionType[];
+}
+
+export interface DiscussionType {
+  discussionReference: string;
+  username: string;
+  avatarReference: string;
+}
+
+export interface RetrieveMessagesReqMsgType {
+  discussionReference: string;
+  page: number;
+  pageSize: number;
+}
+
+export interface RetrieveMessagesRespMsgType {
+  messages: MessageType[];
+}
+
+export interface MessageType {
+  sender: string;
+  receiver: string;
+  messageText: string;
+  deleted: boolean;
+  createdAt: string;
+}
+
+export interface SaveMessageReqMsgType {
+  discussionReference: string;
+  message: MessageType;
+}

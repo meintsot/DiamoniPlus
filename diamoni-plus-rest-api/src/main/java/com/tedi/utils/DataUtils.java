@@ -35,4 +35,8 @@ public class DataUtils {
         return areDatesEqual(rentalSpaceDateRangeType.getStartDate(), rentalSpaceDateRange.getStartDate()) &&
                 areDatesEqual(rentalSpaceDateRangeType.getEndDate(), rentalSpaceDateRange.getEndDate());
     }
+
+    public static Double calculateAverage(Double previousAverage, Double newValue, Integer totalValues) {
+        return (totalValues*previousAverage + newValue) / (totalValues + 1);
+    }
 }

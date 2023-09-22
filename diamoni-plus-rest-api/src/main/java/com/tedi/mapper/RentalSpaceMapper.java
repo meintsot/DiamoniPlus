@@ -166,7 +166,7 @@ public class RentalSpaceMapper {
         return response;
     }
 
-    private List<TransportationAccessType> toTransportationAccessType(List<TransportationAccess> transportationAccessList) {
+    public List<TransportationAccessType> toTransportationAccessType(List<TransportationAccess> transportationAccessList) {
         return transportationAccessList.stream().map(this::toTransportationAccessType).toList();
     }
 
@@ -181,7 +181,7 @@ public class RentalSpaceMapper {
         return transportationAccessType;
     }
 
-    private LocationType toLocationType(Location location) {
+    public LocationType toLocationType(Location location) {
 
         LocationType locationType = new LocationType();
         locationType.setCountry(location.getCountry());
@@ -208,7 +208,7 @@ public class RentalSpaceMapper {
         return rentalSpaceDateRangeType;
     }
 
-    private AmenitiesType toAmenitiesType(Amenities amenities) {
+    public AmenitiesType toAmenitiesType(Amenities amenities) {
 
         AmenitiesType amenitiesType = new AmenitiesType();
         amenitiesType.setWirelessInternet(amenities.getWirelessInternet());

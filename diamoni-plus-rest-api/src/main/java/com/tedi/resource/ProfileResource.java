@@ -1,5 +1,6 @@
 package com.tedi.resource;
 
+import com.tedi.dto.RetrieveUserProfileImageRespMsgType;
 import com.tedi.service.ProfileService;
 import com.tedi.auth.Roles;
 import com.tedi.dto.GetUserProfileRespMsgType;
@@ -21,6 +22,13 @@ public class ProfileResource {
     @Produces(MediaType.APPLICATION_JSON)
     public GetUserProfileRespMsgType getUserProfile(@PathParam("username") String username) {
         return profileService.getUserProfile(username);
+    }
+
+    @GET
+    @Path("/{username}/image")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RetrieveUserProfileImageRespMsgType retrieveUserProfileImage(@PathParam("username") String username) {
+        return profileService.retrieveUserProfileImage(username);
     }
 
     @PUT

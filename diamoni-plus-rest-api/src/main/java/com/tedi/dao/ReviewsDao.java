@@ -21,13 +21,16 @@ public class ReviewsDao {
     }
 
     public List<Review> retrieveReviews(RetrieveReviewsReqMsgType param) {
+
+        int startIndex = (param.getPage() - 1) * param.getPageSize();
+
         TypedQuery<Review> query;
         if (Objects.nonNull(param.getUsername())) {
             query = retrieveReviewsByUsername(param.getUsername());
         } else {
             query = retrieveReviewsByRentalSpaceReference(param.getRentalSpaceReference());
         }
-        return query.setFirstResult(param.getPage()).setMaxResults(param.getPageSize()).getResultList();
+        return query.setFirstResult(startIndex).setMaxResults(param.getPageSize()).getResultList();
     }
 
     private TypedQuery<Review> retrieveReviewsByUsername(String username) {

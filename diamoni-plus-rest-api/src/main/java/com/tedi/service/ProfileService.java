@@ -3,6 +3,8 @@ package com.tedi.service;
 import com.tedi.auth.UserService;
 import com.tedi.dao.DiamoniPlusUserDao;
 import com.tedi.dto.GetUserProfileRespMsgType;
+import com.tedi.dto.ImageFileType;
+import com.tedi.dto.RetrieveUserProfileImageRespMsgType;
 import com.tedi.dto.UpdateUserProfileReqMsgType;
 import com.tedi.fault.ErrorMessageType;
 import com.tedi.fault.ValidationFault;
@@ -36,6 +38,20 @@ public class ProfileService {
         );
 
         return profileMapper.toGetUserProfileRespMsgType(diamoniPlusUser);
+    }
+
+    public RetrieveUserProfileImageRespMsgType retrieveUserProfileImage(String username) throws ValidationFault {
+        DiamoniPlusUser diamoniPlusUser = diamoniPlusUserDao.findByUsername(username).orElseThrow(
+                () -> new ValidationFault(ErrorMessageType.DATA_01_ProfileService)
+        );
+
+        ImageFileType avatar = Objects.nonNull(diamoniPlusUser.getAvatar()) ?
+                imageFileMapper.toImageFileType(diamoniPlusUser.getAvatar()) : null;
+
+        RetrieveUserProfileImageRespMsgType response = new RetrieveUserProfileImageRespMsgType();
+        response.setAvatar(avatar);
+
+        return response;
     }
 
     public void updateUserProfile(UpdateUserProfileReqMsgType param) throws ValidationFault {

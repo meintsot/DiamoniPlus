@@ -1,0 +1,13 @@
+<div #chatContainer class="chat-container">
+  <div *ngFor="let message of messages" class="message" [ngClass]="{'me': message.sender === myUsername, 'them': message.sender !== myUsername}">
+    <img [src]="otherAvatar" alt="User Avatar" class="avatar" *ngIf="message.sender !== myUsername">
+    <div class="message-body">{{ message.messageText }}</div>
+    <img [src]="myAvatar" alt="My Avatar" class="avatar" *ngIf="message.sender === myUsername">
+  </div>
+  <!-- Loader for infinite scrolling -->
+  <div *ngIf="isLoading" class="loader">Loading...</div>
+</div>
+<div class="input-bar">
+  <input [(ngModel)]="newMessage" placeholder="Type a message..." class="message-input" />
+  <button (click)="sendMessage()" class="send-button">Send</button>
+</div>

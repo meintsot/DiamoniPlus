@@ -30,6 +30,9 @@ public class ReviewsQueryParametersConverter {
             param.setPageSize(DEFAULT_PAGE_SIZE);
         }
 
+        param.setRentalSpaceReference(queryParameters.getFirst(Param.RENTAL_SPACE_REFERENCE));
+        param.setUsername(queryParameters.getFirst(Param.USERNAME));
+
         return param;
     }
 }
