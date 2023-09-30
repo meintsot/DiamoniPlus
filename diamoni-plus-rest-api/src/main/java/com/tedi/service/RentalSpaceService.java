@@ -189,7 +189,7 @@ public class RentalSpaceService {
             rentalSpace.setAmenities(amenities);
         }
         if (param.getAvailableRentPeriods().size() != 0) {
-            rentalSpace.getAvailableRentPeriods().clear();
+            rentalSpace.getAvailableRentPeriods().removeIf(rentPeriod -> rentPeriod.getAvailable());
             rentalSpace.getAvailableRentPeriods().addAll(rentalSpaceMapper.toRentalSpaceDateRange(param.getAvailableRentPeriods()));
         }
         if (Objects.nonNull(param.getLocation())) {

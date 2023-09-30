@@ -44,7 +44,7 @@ public class BookingDao {
     }
 
     public void cancelBooking(Booking booking) {
-        em.remove(booking);
+        em.createNamedQuery("Booking.deleteById").setParameter("id", booking.getId()).executeUpdate();
     }
 
     public List<RentalSpaceDBType> myBookings(MyBookingsReqMsgType param, String user) {

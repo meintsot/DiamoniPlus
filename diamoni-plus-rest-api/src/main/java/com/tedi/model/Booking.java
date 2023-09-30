@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Booking.findByBookingReference", query = "select b from Booking b where b.bookingReference = :bookingReference"),
-        @NamedQuery(name = "Booking.findByTenant_UsernameAndRentalSpace_RentalSpaceReference", query = "select b from Booking b where b.tenant.username = :username and b.rentalSpace.rentalSpaceReference = :rentalSpaceReference")
+        @NamedQuery(name = "Booking.findByTenant_UsernameAndRentalSpace_RentalSpaceReference", query = "select b from Booking b where b.tenant.username = :username and b.rentalSpace.rentalSpaceReference = :rentalSpaceReference"),
+        @NamedQuery(name = "Booking.deleteById", query = "delete from Booking b where b.id = :id")
 })
 public class Booking {
     @Id
@@ -18,23 +19,23 @@ public class Booking {
     @Column(name = "booking_reference", nullable = false)
     private String bookingReference;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
     @JoinColumn(name = "host_id", nullable = false)
     private DiamoniPlusUser host;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
     @JoinColumn(name = "tenant_id", nullable = false)
     private DiamoniPlusUser tenant;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false)
     @JoinColumn(name = "rental_space_id", nullable = false)
     private RentalSpace rentalSpace;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false, orphanRemoval = false)
     @JoinColumn(name = "booking_date_range_id", nullable = false)
     private RentalSpaceDateRange bookingDateRange;
 
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "booking", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = false)
     private Review review;
 
     @Column(name = "created_at", nullable = false)

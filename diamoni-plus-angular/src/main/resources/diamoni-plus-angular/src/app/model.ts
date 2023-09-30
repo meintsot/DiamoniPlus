@@ -356,3 +356,27 @@ export interface SaveMessageReqMsgType {
   discussionReference: string;
   message: MessageType;
 }
+
+export interface UpdateRentalSpaceDetailsReqMsgType {
+  title: string;
+  description: string;
+  roomType: RoomContentType;
+  noOfBedrooms: number;
+  maxNumOfPeople: number;
+  noOfBeds: number;
+  noOfBathrooms: number;
+  hasLivingRoom: boolean;
+  area: number;
+  smokingAllowed: boolean;
+  petsAllowed: boolean;
+  eventsAllowed: boolean;
+  minDuration: number;
+  rent: number;
+  additionalRentPerPerson: number;
+  amenities: AmenitiesType;
+  availableRentPeriods: RentalSpaceDateRangeType[];
+  location: LocationType;
+  transportationAccess: TransportationAccessType[];
+  rentalImageIdentifications: string[];
+  rentalSpaceReference: string;
+}

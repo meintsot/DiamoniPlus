@@ -94,11 +94,11 @@ public class RentalSpace {
     })
     private Amenities amenities;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = false)
     @JoinColumn(name = "rental_space_id")
     private List<RentalSpaceDateRange> availableRentPeriods = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "host_id")
     private DiamoniPlusUser host;
 
@@ -112,17 +112,17 @@ public class RentalSpace {
     @Column(name = "total_reviews", nullable = false)
     private Integer totalReviews = 0;
 
-    @OneToMany(mappedBy = "rentalSpace", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "rentalSpace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = false)
     private List<Booking> bookings = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = false)
     @JoinColumn(name = "rental_space_id")
     private List<ImageFile> rentalImages = new ArrayList<>();
 
-    @OneToOne(mappedBy = "rentalSpace", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @OneToOne(mappedBy = "rentalSpace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false, orphanRemoval = false)
     private Location location;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = false)
     @JoinColumn(name = "rental_space_id")
     private List<TransportationAccess> transportationAccess = new ArrayList<>();
 

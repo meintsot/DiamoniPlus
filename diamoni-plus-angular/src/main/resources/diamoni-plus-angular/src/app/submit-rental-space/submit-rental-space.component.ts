@@ -8,6 +8,7 @@ import {RentalSpaceService} from "../services/rental-space.service";
 import {Utils} from "../Utils";
 import {InfoService} from "../services/info.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {tap} from "rxjs";
 
 @Component({
   selector: 'app-submit-rental-space',
@@ -26,6 +27,7 @@ export class SubmitRentalSpaceComponent implements OnInit {
   transportationAccessMarkers: Leaflet.Marker[] = [];
   uploadedImages: string[] = [];
   isEdit = false;
+  rentalSpaceReference!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +35,7 @@ export class SubmitRentalSpaceComponent implements OnInit {
     private rentalSpaceService: RentalSpaceService,
     private infoService: InfoService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
   }
 
@@ -46,12 +48,32 @@ export class SubmitRentalSpaceComponent implements OnInit {
   }
 
   private checkIfEdit() {
-    const rentalSpaceReference = this.route.snapshot.queryParams['rentalSpaceReference'];
-    if (!Utils.isStringBlank(rentalSpaceReference)) {
-      this.rentalSpaceService.retrieveRentalSpaceDetails(rentalSpaceReference).subscribe(res => {
+    this.rentalSpaceReference = this.route.snapshot.queryParams['rentalSpaceReference'];
+    if (!Utils.isStringBlank(this.rentalSpaceReference)) {
+      this.rentalSpaceService.retrieveRentalSpaceDetails(this.rentalSpaceReference).pipe(
+        tap(res=> {
+          this.rentalSpaceService.retrieveRentalImagesFromRentalSpaceDetails(res).subscribe(images => this.uploadedImages = images);
+        })
+      ).subscribe(res => {
         this.submitRentalSpaceForm.patchValue(res);
+        const transportationAccess = (this.submitRentalSpaceForm.get('transportationAccess') as FormArray);
+        res.transportationAccess.forEach(transportation => {
+          transportationAccess.push(this.fb.group({
+            transportationName: [transportation.transportationName, Validators.required],
+            transportationType: [transportation.transportationType, Validators.required],
+            latitude: transportation.latitude,
+            longitude: transportation.longitude
+          }));
+        });
+        const availableRentPeriods = (this.submitRentalSpaceForm.get('availableRentPeriods') as FormArray);
+        res.availableRentPeriods.forEach(availableRentPeriod => {
+          availableRentPeriods.push(this.fb.group({
+            startDate: [new Date(availableRentPeriod.startDate.replace(' ', 'T')), Validators.required],
+            endDate: [new Date(availableRentPeriod.endDate.replace(' ', 'T')), Validators.required]
+          }));
+        });
         this.isEdit = true;
-      })
+      });
     }
   }
 
@@ -76,7 +98,7 @@ export class SubmitRentalSpaceComponent implements OnInit {
       icon: new Leaflet.Icon({
         iconSize: [50, 41],
         iconAnchor: [13, 41],
-        iconUrl: 'assets/blue-marker.svg',
+        iconUrl: '../assets/blue-marker.svg',
       }),
       title: 'Workspace'
     } as Leaflet.MarkerOptions);
@@ -170,9 +192,30 @@ export class SubmitRentalSpaceComponent implements OnInit {
   }
 
   submitForm() {
-    this.rentalSpaceService.createRentalSpace(this.submitRentalSpaceForm.value).subscribe((res) => {
-      this.infoService.sendSuccess('Successfully created rental space!');
-      this.router.navigate(['my-rental-spaces']);
+    this.mapRentPeriods(this.submitRentalSpaceForm.get('availableRentPeriods'));
+    if (!this.isEdit) {
+      this.rentalSpaceService.createRentalSpace(this.submitRentalSpaceForm.value).subscribe((res) => {
+        this.infoService.sendSuccess('Successfully created rental space!');
+        this.router.navigate(['my-rental-spaces']);
+      });
+    } else {
+      this.rentalSpaceService.updateRentalSpaceDetails({
+        ...this.submitRentalSpaceForm.value,
+        rentalSpaceReference: this.rentalSpaceReference
+      }).subscribe((res) => {
+        this.infoService.sendSuccess('Successfully updated rental space!');
+        this.router.navigate(['my-rental-spaces']);
+      });
+    }
+  }
+
+  mapRentPeriods(rentPeriods: FormArray) {
+    return rentPeriods.controls.map(rentPeriod => {
+      rentPeriod = (rentPeriod as FormGroup);
+      const rentPeriodV = rentPeriod.value;
+      rentPeriod.get('startDate')?.patchValue(this.datePipe.transform(rentPeriodV.startDate, 'yyyy-MM-dd HH:mm:ss'));
+      rentPeriod.get('endDate')?.patchValue(this.datePipe.transform(rentPeriodV.endDate, 'yyyy-MM-dd HH:mm:ss'));
+      return rentPeriod;
     });
   }
 
@@ -231,15 +274,5 @@ export class SubmitRentalSpaceComponent implements OnInit {
       rentalImageIdentifications.removeAt(i);
       this.uploadedImages.splice(i, 1);
     })
-  }
-
-  assignStartDate(rentPeriod: FormGroup, $event: Date) {
-    const date = this.datePipe.transform($event, 'yyyy-MM-dd HH:mm:ss');
-    rentPeriod.get('startDate')?.patchValue(date);
-  }
-
-  assignEndDate(rentPeriod: FormGroup, $event: Date) {
-    const date = this.datePipe.transform($event, 'yyyy-MM-dd HH:mm:ss');
-    rentPeriod.get('endDate')?.patchValue(date);
   }
 }

@@ -20,10 +20,8 @@ div[clickable]:hover {
   flex-grow: 1;
 }
 
-.p-inputgroup > .p-dropdown > div {
-  width: 100% !important;
-}
-
-.p-inputgroup > p-dropdown {
-  flex: 1 1 auto !important;
+.p-inputgroup p-dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
