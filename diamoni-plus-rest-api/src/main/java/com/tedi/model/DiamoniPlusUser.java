@@ -14,7 +14,8 @@ import java.util.List;
 @Table(name = "diamoni_plus_user")
 @NamedQueries({
         @NamedQuery(name = "DiamoniPlusUser.findByUsername", query = "select d from DiamoniPlusUser d where d.username = :username"),
-        @NamedQuery(name = "DiamoniPlusUser.findByEmail", query = "select d from DiamoniPlusUser d where d.email = :email")
+        @NamedQuery(name = "DiamoniPlusUser.findByEmail", query = "select d from DiamoniPlusUser d where d.email = :email"),
+        @NamedQuery(name = "DiamoniPlusUser.findAll", query = "select d from DiamoniPlusUser d")
 })
 public class DiamoniPlusUser {
     @Id
@@ -71,6 +72,9 @@ public class DiamoniPlusUser {
     @Digits(integer = 1, fraction = 1)
     @Column(name = "average_reviews", nullable = false)
     private Double averageReviews = 0.0;
+
+    @Column(name = "total_reviews", nullable = false)
+    private Integer totalReviews = 0;
 
     @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RentalSpace> rentalSpaces = new ArrayList<>();
@@ -215,6 +219,14 @@ public class DiamoniPlusUser {
 
     public void setAverageReviews(Double averageReviews) {
         this.averageReviews = averageReviews;
+    }
+
+    public Integer getTotalReviews() {
+        return totalReviews;
+    }
+
+    public void setTotalReviews(Integer totalReviews) {
+        this.totalReviews = totalReviews;
     }
 
     public List<RentalSpace> getRentalSpaces() {

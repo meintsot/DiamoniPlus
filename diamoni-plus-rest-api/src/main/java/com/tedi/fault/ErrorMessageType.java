@@ -31,11 +31,20 @@ public enum ErrorMessageType {
     DATA_01_ReviewsService("Tenant not found!"),
     DATA_02_ReviewsService("Host not found!"),
     DATA_03_ReviewsService("Booking not found!"),
+    DATA_04_ReviewsService("Rental Space not found!"),
 
     DATA_01_BookingService("Tenant not found."),
     DATA_02_BookingService("Rental space not found."),
     DATA_03_BookingService("Booking should be in a valid date range."),
-    DATA_04_BookingService("Booking not found!");
+    DATA_04_BookingService("Booking not found!"),
+
+    DATA_01_AdminService("Tenant not found."),
+
+    DATA_01_DiscussionsService("Host not found."),
+    DATA_02_DiscussionsService("Tenant not found."),
+    DATA_03_DiscussionsService("Discussion not found."),
+    DATA_04_DiscussionsService("Sender not found."),
+    DATA_05_DiscussionsService("Receiver not found.");
 
     private final String error;
 

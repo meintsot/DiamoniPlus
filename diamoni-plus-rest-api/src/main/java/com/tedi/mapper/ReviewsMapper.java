@@ -42,8 +42,8 @@ public class ReviewsMapper {
         reviewResultType.setRating(review.getRating());
         reviewResultType.setDescription(review.getDescription());
         reviewResultType.setAuthor(review.getTenant().getUsername());
-        if (Objects.nonNull(review.getHost().getAvatar())) {
-            reviewResultType.setAuthorImageIdentification(review.getHost().getAvatar().getBinaryIdentification());
+        if (Objects.nonNull(review.getTenant().getAvatar())) {
+            reviewResultType.setAuthorImageIdentification(review.getTenant().getAvatar().getBinaryIdentification());
         }
 
         return reviewResultType;

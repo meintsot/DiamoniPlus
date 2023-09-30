@@ -143,6 +143,8 @@
           <!-- Cancel Button for when already booked -->
           <button *ngIf="isLoggedIn && isBooked()" pButton type="button" label="Cancel booking for {{ bookedDateRange }}" (click)="cancelBooking()"></button>
 
+          <button *ngIf="isLoggedIn" pButton type="button" icon="pi pi-phone" label="Contact with host" (click)="contactHost()"></button>
+
           <!-- Dialog for Date Range Selection -->
           <p-dialog header="Choose Available Date Range" [(visible)]="showDialog" [modal]="true" [style]="{width: '400px'}">
             <p-listbox (onChange)="selectDateRange($event)" [options]="availableRentPeriods" optionLabel="range" [style]="{'width':'100%'}"></p-listbox>
@@ -194,15 +196,22 @@
         <!-- Existing Reviews -->
         <div class="mt-4">
           <h3>Existing Reviews</h3>
-          <div class="review" *ngFor="let review of reviews">
-            <!-- Use your custom rating component here -->
-            <app-star-rating [rating]="review.rating"></app-star-rating>
-            <p>{{review.description}}</p>
+          <div class="review mb-3" *ngFor="let review of reviews; let i = index">
+            <div class="d-flex align-items-start">
+              <!-- Avatar -->
+              <div class="me-3">
+                <p-avatar *ngIf="reviewImages[i] !== ''" [image]="reviewImages[i]" size="large" shape="circle"></p-avatar>
+                <p-avatar *ngIf="reviewImages[i] === ''" [label]="review.author.substring(0, 1)" size="large" shape="circle"></p-avatar>
+              </div>
+              <!-- Review Content -->
+              <div class="flex-grow-1">
+                <p class="mb-1"><strong>{{review.author}}</strong></p>
+                <p class="mb-1">{{review.description}}</p>
+                <app-star-rating [rating]="review.rating"></app-star-rating>
+              </div>
+            </div>
             <hr>
           </div>
-
-          <!-- Pagination -->
-          <p-paginator [rows]="5" [totalRecords]="rentalSpaceDetails.totalReviews" (onPageChange)="paginate($event)"></p-paginator>
         </div>
       </p-fieldset>
     </p-card>

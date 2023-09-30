@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Message.findByDiscussion_DiscussionReference", query = "select m from Message m " +
+                "where m.discussion.discussionReference = :discussionReference order by m.createdAt desc")
+})
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +18,9 @@ public class Message {
     @Column(name = "message_text", nullable = false)
     private String messageText;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
+
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "sender_id", nullable = false)
     private DiamoniPlusUser sender;
@@ -21,6 +28,10 @@ public class Message {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "receiver_id", nullable = false)
     private DiamoniPlusUser receiver;
+
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "discussion_id", nullable = false)
+    private Discussion discussion;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -32,24 +43,12 @@ public class Message {
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
 
-    public Integer getDiamoniPlusVersion() {
-        return diamoniPlusVersion;
+    public Long getId() {
+        return id;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMessageText() {
@@ -60,12 +59,12 @@ public class Message {
         this.messageText = messageText;
     }
 
-    public DiamoniPlusUser getReceiver() {
-        return receiver;
+    public Boolean getDeleted() {
+        return isDeleted;
     }
 
-    public void setReceiver(DiamoniPlusUser receiver) {
-        this.receiver = receiver;
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public DiamoniPlusUser getSender() {
@@ -76,11 +75,43 @@ public class Message {
         this.sender = sender;
     }
 
-    public Long getId() {
-        return id;
+    public DiamoniPlusUser getReceiver() {
+        return receiver;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setReceiver(DiamoniPlusUser receiver) {
+        this.receiver = receiver;
+    }
+
+    public Discussion getDiscussion() {
+        return discussion;
+    }
+
+    public void setDiscussion(Discussion discussion) {
+        this.discussion = discussion;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getDiamoniPlusVersion() {
+        return diamoniPlusVersion;
+    }
+
+    public void setDiamoniPlusVersion(Integer diamoniPlusVersion) {
+        this.diamoniPlusVersion = diamoniPlusVersion;
     }
 }

@@ -6,8 +6,8 @@ import {
   RetrieveReviewsReqMsgType, RetrieveUserInfoRespMsgType,
   ReviewResultType
 } from "../model";
-import {ActivatedRoute, Router} from "@angular/router";
-import {catchError, EMPTY, Subject, switchMap, takeUntil} from "rxjs";
+import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
+import {catchError, EMPTY, Subject, switchMap, takeUntil, tap} from "rxjs";
 import * as Leaflet from "leaflet";
 import {PaginatorState} from "primeng/paginator";
 import {ReviewsService} from "../services/reviews.service";
@@ -18,6 +18,7 @@ import {ListboxChangeEvent} from "primeng/listbox";
 import {BookingService} from "../services/booking.service";
 import {InfoService} from "../services/info.service";
 import {Util} from "leaflet";
+import {ProfileService} from "../services/profile.service";
 
 @Component({
   selector: 'app-rental-space-details',
@@ -30,6 +31,7 @@ export class RentalSpaceDetailsComponent implements OnInit, OnDestroy {
   locationMapOptions!: Leaflet.MapOptions;
   transportationMapOptions!: Leaflet.MapOptions;
   images!: string[];
+  reviewImages!: string[];
   isLoading = true;
   hasSubmittedReview = false;
   reviews: ReviewResultType[] = [];
@@ -52,6 +54,7 @@ export class RentalSpaceDetailsComponent implements OnInit, OnDestroy {
     private rentalSpaceService: RentalSpaceService,
     private bookingService: BookingService,
     private reviewsService: ReviewsService,
+    private profileService: ProfileService,
     private infoService: InfoService,
     private router: Router,
     private route: ActivatedRoute,
@@ -89,6 +92,18 @@ export class RentalSpaceDetailsComponent implements OnInit, OnDestroy {
 
   paginate($event: PaginatorState) {
 
+  }
+
+  contactHost() {
+    const queryParams: any = {
+      username: this.rentalSpaceDetails.host
+    };
+
+    const navigationExtras: NavigationExtras = {
+      queryParams,
+    };
+
+    this.router.navigate(['/view-profile'], navigationExtras);
   }
 
   submitReview() {
@@ -161,6 +176,12 @@ export class RentalSpaceDetailsComponent implements OnInit, OnDestroy {
       switchMap(params =>
         this.reviewsService.retrieveReviews(params)
           .pipe(catchError(err => EMPTY))),
+      tap(res => {
+        const authors = res.reviewResults.map(review => review.author);
+        this.profileService.retrieveUserProfileImages(authors).pipe(takeUntil(this.destroy)).subscribe(images => {
+          this.reviewImages = images;
+        });
+      }),
       takeUntil(this.destroy)
     ).subscribe(({reviewResults, averageReviews}) => {
       this.reviews = reviewResults;

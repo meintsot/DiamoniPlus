@@ -27,8 +27,8 @@ public class ReviewsValidator {
     }
 
     public void validateEitherHostUsernameOrRentalSpaceReferenceIsRequired(RetrieveReviewsReqMsgType param) {
-        if (Objects.nonNull(param.getUsername()) && Objects.nonNull(param.getUsername())) {
-            throw new ValidationFault(ErrorMessageType.MESS_02_ReviewsService);
+        if (Objects.nonNull(param.getRentalSpaceReference()) && Objects.nonNull(param.getUsername())) {
+            throw new ValidationFault(ErrorMessageType.MESS_03_ReviewsService);
         }
     }
 }
