@@ -8,10 +8,7 @@ import com.tedi.dto.*;
 import com.tedi.fault.ErrorMessageType;
 import com.tedi.fault.ValidationFault;
 import com.tedi.mapper.RentalSpaceMapper;
-import com.tedi.model.Booking;
-import com.tedi.model.DiamoniPlusUser;
-import com.tedi.model.RentalSpace;
-import com.tedi.model.RentalSpaceDateRange;
+import com.tedi.model.*;
 import com.tedi.utils.DataUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -73,6 +70,10 @@ public class BookingService {
                 () -> new ValidationFault(ErrorMessageType.DATA_04_BookingService)
         );
         booking.getBookingDateRange().setAvailable(true);
+        Review review = booking.getReview();
+        if (review != null) {
+            review.setBooking(null);
+        }
         bookingDao.cancelBooking(booking);
     }
 

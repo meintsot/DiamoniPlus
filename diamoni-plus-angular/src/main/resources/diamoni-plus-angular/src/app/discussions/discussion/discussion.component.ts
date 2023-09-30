@@ -1,4 +1,14 @@
-import {Component, OnInit, OnDestroy, ElementRef, ViewChild, Input, AfterViewInit} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+  ViewChild,
+  Input,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import { DiscussionsService } from '../../services/discussions.service'; // Adjust the path
 import { ProfileService } from '../../services/profile.service'; // Adjust the path
 import { MessageType, RetrieveMessagesRespMsgType } from '../../model'; // Adjust the path
@@ -12,7 +22,7 @@ import {Utils} from "../../Utils";
   templateUrl: './discussion.component.html',
   styleUrls: ['./discussion.component.css']
 })
-export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DiscussionComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
   @Input() selectedDiscussion!: string;
@@ -38,6 +48,25 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.init();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.init();
+    this.chatContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
+  }
+
+  init() {
+    this.isLoading = false;
+    this.hasMoreMessages = true;
+    this.destroy.next();
+    this.destroy = new Subject<void>();
+    this.messages = [];
+    this.pageNumber = 1;
+    if (this.socket) {
+      this.socket.complete();
+    }
+
     this.profileService.retrieveUserProfileImage(this.selectedUser).pipe(takeUntil(this.destroy)).subscribe(res => {
       this.otherAvatar = Utils.createDataUrl(res.avatar);
     })
@@ -72,7 +101,7 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
           this.messages = res.messages.reverse();
           this.isLoading = false;
           if (res.messages.length < this.pageSize) {
-            this.hasMoreMessages = false; // Set flag to false if no more messages
+            this.hasMoreMessages = false;
           } else {
             this.pageNumber++;
           }
@@ -139,6 +168,4 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoading = false;
       });
   }
-
-
 }

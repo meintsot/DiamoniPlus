@@ -143,31 +143,31 @@
           <div class="d-flex justify-content-around">
             <div class="p-2 p-col-6 p-inputgroup">
               <label for="wirelessInternet" class="p-2">Wireless Internet</label>
-              <p-checkbox [binary]="true" id="wirelessInternet" name="wirelessInternet"></p-checkbox>
+              <p-checkbox [binary]="true" id="wirelessInternet" name="wirelessInternet" formControlName="wirelessInternet"></p-checkbox>
             </div>
             <div class="p-2 p-col-6 p-inputgroup">
               <label for="cooling" class="p-2">Cooling</label>
-              <p-checkbox [binary]="true" id="cooling" name="cooling"></p-checkbox>
+              <p-checkbox [binary]="true" id="cooling" name="cooling" formControlName="cooling"></p-checkbox>
             </div>
             <div class="p-2 p-col-6 p-inputgroup">
               <label for="heating" class="p-2">Heating</label>
-              <p-checkbox [binary]="true" id="heating" name="heating"></p-checkbox>
+              <p-checkbox [binary]="true" id="heating" name="heating" formControlName="heating"></p-checkbox>
             </div>
             <div class="p-2 p-col-6 p-inputgroup">
               <label for="kitchen" class="p-2">Kitchen</label>
-              <p-checkbox [binary]="true" id="kitchen" name="kitchen"></p-checkbox>
+              <p-checkbox [binary]="true" id="kitchen" name="kitchen" formControlName="kitchen"></p-checkbox>
             </div>
             <div class="p-2 p-col-6 p-inputgroup">
               <label for="television" class="p-2">Television</label>
-              <p-checkbox [binary]="true" id="television" name="television"></p-checkbox>
+              <p-checkbox [binary]="true" id="television" name="television" formControlName="television"></p-checkbox>
             </div>
             <div class="p-2 p-col-6 p-inputgroup">
               <label for="parkingSpace" class="p-2">Parking Space</label>
-              <p-checkbox [binary]="true" id="parkingSpace" name="parkingSpace"></p-checkbox>
+              <p-checkbox [binary]="true" id="parkingSpace" name="parkingSpace" formControlName="parkingSpace"></p-checkbox>
             </div>
             <div class="p-2 p-col-6 p-inputgroup">
               <label for="elevator" class="p-2">Elevator</label>
-              <p-checkbox [binary]="true" id="elevator" name="elevator"></p-checkbox>
+              <p-checkbox [binary]="true" id="elevator" name="elevator" formControlName="elevator"></p-checkbox>
             </div>
           </div>
         </div>
@@ -186,28 +186,31 @@
           <div class="pi pi-plus" style="font-size: 2.5rem; color: white; background-color: blue; border-radius: 100%"
                (click)="addRentPeriod()"></div>
         </div>
-        <div *ngFor="let rentPeriod of submitRentalSpaceForm.get('availableRentPeriods').controls let index = index">
-          <div class="d-flex justify-content-around align-items-center mt-2">
-            <div>Start Date:</div>
-            <p-calendar
-              id="startDate"
-              [showIcon]="true"
-              [showButtonBar]="true"
-              (onSelect)="assignStartDate(rentPeriod, $event)"
-            ></p-calendar>
+        <div formArrayName="availableRentPeriods">
+          <div *ngFor="let rentPeriod of submitRentalSpaceForm.get('availableRentPeriods').controls; let index = index" [formGroupName]="index">
+            <div class="d-flex justify-content-around align-items-center mt-2">
+              <div>Start Date:</div>
+              <p-calendar
+                id="startDate"
+                formControlName="startDate"
+                [showIcon]="true"
+                [showButtonBar]="true"
+              ></p-calendar>
 
-            <div>End Date:</div>
-            <p-calendar
-              id="endDate"
-              [showIcon]="true"
-              [showButtonBar]="true"
-              (onSelect)="assignEndDate(rentPeriod, $event)"
-            ></p-calendar>
-            <div (click)="removeAvailableRentPeriod(index)">
-              <i class="pi pi-times" style="color: white; background-color: red; border-radius: 100%; font-size: 1.5rem"></i>
+              <div>End Date:</div>
+              <p-calendar
+                id="endDate"
+                formControlName="endDate"
+                [showIcon]="true"
+                [showButtonBar]="true"
+              ></p-calendar>
+              <div (click)="removeAvailableRentPeriod(index)">
+                <i class="pi pi-times" style="color: white; background-color: red; border-radius: 100%; font-size: 1.5rem"></i>
+              </div>
             </div>
           </div>
         </div>
+
       </p-fieldset>
 
       <p-fieldset *ngIf="activeIndex === 4" formGroupName="location">

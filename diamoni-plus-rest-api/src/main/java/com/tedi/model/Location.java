@@ -41,7 +41,7 @@ public class Location {
     @Column(name = "longitude")
     private double longitude;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, optional = false, orphanRemoval = false)
     @JoinColumn(name = "rental_space_id", nullable = false)
     private RentalSpace rentalSpace;
 

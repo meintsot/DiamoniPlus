@@ -68,7 +68,9 @@
         <span class="p-inputgroup-addon">
             <i class="pi pi-id-card"></i>
         </span>
-        <p-dropdown [options]="roles" formControlName="desiredRole" placeholder="Choose a role" [style]="{'flex-grow': '1'}"></p-dropdown>
+        <p-dropdown [showClear]="false"
+                    [autoDisplayFirst]="false"
+                    [options]="roles" formControlName="desiredRole" placeholder="Choose a role" [style]="{'flex-grow': '1'}"></p-dropdown>
       </div>
 
       <!-- Submit button -->

@@ -29,7 +29,7 @@ public class Review {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = false)
     private Booking booking;
 
     @Column(name = "created_at", nullable = false)
@@ -42,10 +42,10 @@ public class Review {
     @Column(name = "diamoni_plus_version")
     private Integer diamoniPlusVersion;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private DiamoniPlusUser tenant;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private DiamoniPlusUser host;
 
     public DiamoniPlusUser getTenant() {

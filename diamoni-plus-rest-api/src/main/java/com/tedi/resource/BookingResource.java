@@ -35,6 +35,7 @@ public class BookingResource {
     @DELETE
     @Path("/{bookingReference}")
     @RolesAllowed(Roles.TENANT)
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public void cancelBooking(@PathParam("bookingReference") String bookingReference) throws ValidationFault {
         bookingService.cancelBooking(bookingReference);

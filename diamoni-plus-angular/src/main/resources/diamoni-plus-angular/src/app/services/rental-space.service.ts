@@ -9,7 +9,7 @@ import {
   RetrieveRentalImageRespMsgType,
   RetrieveRentalSpaceDetailsRespMsgType,
   SearchRentalSpacesReqMsgType,
-  SearchRentalSpacesRespMsgType,
+  SearchRentalSpacesRespMsgType, UpdateRentalSpaceDetailsReqMsgType,
   UploadRentalImageReqMsgType,
   UploadRentalImageRespMsgType
 } from "../model";
@@ -160,6 +160,13 @@ export class RentalSpaceService {
 
   createRentalSpace(payload: CreateRentalSpaceReqMsgType) {
     return this.http.post(environment.rentalSpace.common, payload)
+      .pipe(
+        catchError(err => this.errorService.sendError(err))
+      );
+  }
+
+  updateRentalSpaceDetails(payload: UpdateRentalSpaceDetailsReqMsgType) {
+    return this.http.put(environment.rentalSpace.common, payload)
       .pipe(
         catchError(err => this.errorService.sendError(err))
       );

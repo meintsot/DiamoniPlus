@@ -20,15 +20,15 @@ public class Discussion {
     @Column(name = "discussion_reference")
     private String discussionReference;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "host_id")
     private DiamoniPlusUser host;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "tenant_id")
     private DiamoniPlusUser tenant;
 
-    @OneToMany(mappedBy = "discussion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "discussion", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = false)
     private List<Message> messages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)

@@ -51,6 +51,7 @@ public class RentalSpaceResource {
     @RolesAllowed(Roles.HOST)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     public void updateRentalSpaceDetails(UpdateRentalSpaceDetailsReqMsgType param) throws ValidationFault {
         rentalSpaceService.updateRentalSpaceDetails(param);
     }

@@ -91,7 +91,13 @@ export class RentalSpaceDetailsComponent implements OnInit, OnDestroy {
   }
 
   paginate($event: PaginatorState) {
-
+    this.page = $event.page ? $event.page : this.page;
+    this.pageSize = $event.pageCount ? $event.pageCount : this.pageSize;
+    this.reviewsSubject.next({
+      page: this.page,
+      pageSize: this.pageSize,
+      rentalSpaceReference: this.rentalSpaceDetails.rentalSpaceReference
+    });
   }
 
   contactHost() {
@@ -111,6 +117,7 @@ export class RentalSpaceDetailsComponent implements OnInit, OnDestroy {
     this.reviewsSubject.next({
       page: this.page, pageSize: this.pageSize, rentalSpaceReference: this.rentalSpaceDetails.rentalSpaceReference
     });
+    this.reviewForm.reset();
   }
 
   submitBooking() {

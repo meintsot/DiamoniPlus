@@ -213,6 +213,10 @@
             <hr>
           </div>
         </div>
+        <p-paginator [rows]="page"
+                     [first]="pageSize"
+                     (onPageChange)="paginate($event)">
+        </p-paginator>
       </p-fieldset>
     </p-card>
   </div>
