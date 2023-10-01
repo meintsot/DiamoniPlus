@@ -6,16 +6,16 @@ import {
   ViewChild,
   Input,
   AfterViewInit,
-  OnChanges,
-  SimpleChanges
+  OnChanges
 } from '@angular/core';
-import { DiscussionsService } from '../../services/discussions.service'; // Adjust the path
-import { ProfileService } from '../../services/profile.service'; // Adjust the path
-import { MessageType, RetrieveMessagesRespMsgType } from '../../model'; // Adjust the path
+import { DiscussionsService } from '../../services/discussions.service';
+import { ProfileService } from '../../services/profile.service'
+import { MessageType, RetrieveMessagesRespMsgType } from '../../model';
 import {Subject, takeUntil} from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import {AuthService} from "../../services/auth.service";
 import {Utils} from "../../Utils";
+import {InfoService} from "../../services/info.service";
 
 @Component({
   selector: 'app-discussion',
@@ -33,8 +33,14 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnChanges, On
   hasMoreMessages = true;
   myUsername!: string;
   myAvatar!: string;
+  myLabel!: string;
   otherAvatar!: string;
+  otherLabel!: string;
   newMessage!: string;
+  displayDialog = false;
+  selectedMessage!: MessageType;
+  showDeleteIcon = false;
+  isHost = false;
 
   private pageNumber = 1;
   private pageSize = 10; // Adjust as needed
@@ -44,14 +50,15 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnChanges, On
   constructor(
     private discussionsService: DiscussionsService,
     private profileService: ProfileService,
-    private authService: AuthService
+    private authService: AuthService,
+    private infoService: InfoService
   ) {}
 
   ngOnInit() {
     this.init();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     this.init();
     this.chatContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
   }
@@ -68,12 +75,23 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     this.profileService.retrieveUserProfileImage(this.selectedUser).pipe(takeUntil(this.destroy)).subscribe(res => {
-      this.otherAvatar = Utils.createDataUrl(res.avatar);
+      if (!Utils.isNullOrUndefined(res.avatar)) {
+        this.otherAvatar = Utils.createDataUrl(res.avatar);
+      } else {
+        this.otherLabel = this.selectedUser.slice(0, 1);
+      }
     })
     this.authService.userInfo$.pipe(takeUntil(this.destroy)).subscribe(userInfo => {
       this.myUsername = userInfo.username;
+      this.isHost = userInfo.role === 'host';
       this.profileService.retrieveUserProfileImage(this.myUsername).pipe(takeUntil(this.destroy))
-        .subscribe(resp => this.myAvatar = Utils.createDataUrl(resp.avatar));
+        .subscribe(resp => {
+          if (!Utils.isNullOrUndefined(resp.avatar)) {
+            this.myAvatar = Utils.createDataUrl(resp.avatar);
+          } else {
+            this.myLabel = userInfo.username.slice(0, 1);
+          }
+        });
     });
     this.loadMessages();
     this.initializeWebSocket();
@@ -87,6 +105,19 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnChanges, On
     this.destroy.next();
     this.destroy.complete();
     this.socket.complete();
+  }
+
+  confirmDeleteMessage(message: MessageType) {
+    this.selectedMessage = message;
+    this.displayDialog = true;
+  }
+
+  deleteMessage(message: MessageType) {
+    this.displayDialog = false;
+    message.deleted = true;
+    this.discussionsService.deleteMessage(message.messageId as string).pipe(takeUntil(this.destroy)).subscribe(() => {
+      this.infoService.sendSuccess(`Message with id ${message.messageId} has been deleted!`);
+    });
   }
 
   loadMessages() {

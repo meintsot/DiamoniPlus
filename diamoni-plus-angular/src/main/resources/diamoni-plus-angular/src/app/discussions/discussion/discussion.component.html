@@ -1,12 +1,38 @@
 <div #chatContainer class="chat-container">
-  <div *ngFor="let message of messages" class="message" [ngClass]="{'me': message.sender === myUsername, 'them': message.sender !== myUsername}">
-    <img [src]="otherAvatar" alt="User Avatar" class="avatar" *ngIf="message.sender !== myUsername">
-    <div class="message-body">{{ message.messageText }}</div>
-    <img [src]="myAvatar" alt="My Avatar" class="avatar" *ngIf="message.sender === myUsername">
+  <div *ngFor="let message of messages"
+       class="message"
+       [ngClass]="{'me': message.sender === myUsername, 'them': message.sender !== myUsername}"
+       (mouseenter)="showDeleteIcon = isHost && !this.message.deleted"
+       (mouseleave)="showDeleteIcon = false">
+
+    <!-- Avatar and Delete Icon -->
+    <div class="avatar-container" *ngIf="message.sender !== myUsername">
+      <p-avatar *ngIf="otherAvatar" [image]="otherAvatar" shape="circle" size="large"></p-avatar>
+      <p-avatar *ngIf="!otherAvatar" [label]="otherLabel" shape="circle" size="large"></p-avatar>
+      <button *ngIf="showDeleteIcon" pButton pTooltip="Delete Message" icon="pi pi-trash" class="p-button-rounded p-button-danger delete-button" (click)="confirmDeleteMessage(message)"></button>
+    </div>
+
+    <!-- Message Body -->
+    <div class="message-body">{{ message.deleted ? 'Message deleted by host' : message.messageText }}</div>
+
+    <!-- Avatar for Current User -->
+    <p-avatar *ngIf="message.sender === myUsername && myAvatar" [image]="myAvatar" shape="circle" size="large"></p-avatar>
+    <p-avatar *ngIf="message.sender === myUsername && !myAvatar" [label]="myLabel" shape="circle" size="large"></p-avatar>
+
+    <!-- Confirmation Dialog -->
+    <p-dialog header="Confirmation" [(visible)]="displayDialog" [modal]="true" [style]="{width: '350px'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+      <p>Are you sure you want to delete this message?</p>
+      <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Yes" (click)="deleteMessage(message)"></button>
+        <button type="button" pButton icon="pi pi-times" label="No" class="p-button-secondary" (click)="displayDialog = false"></button>
+      </p-footer>
+    </p-dialog>
   </div>
+
   <!-- Loader for infinite scrolling -->
   <div *ngIf="isLoading" class="loader">Loading...</div>
 </div>
+
 <div class="input-bar">
   <input [(ngModel)]="newMessage" placeholder="Type a message..." class="message-input" />
   <button (click)="sendMessage()" class="send-button">Send</button>

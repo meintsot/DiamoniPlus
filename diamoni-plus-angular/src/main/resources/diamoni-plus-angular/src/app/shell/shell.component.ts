@@ -58,22 +58,25 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   initItems() {
     this.items = [
-      { label: 'Search Rental Spaces', icon: 'pi pi-fw pi-search', url: '/' }
+      { label: 'Search Rental Spaces', icon: 'pi pi-fw pi-search', routerLink: ['/'] }
     ];
     if (this.isLoggedIn) {
-      this.items.push({ label: 'Discussions', icon: 'pi pi-fw pi-comments', url: '/discussions' });
+      this.items.push({ label: 'Discussions', icon: 'pi pi-fw pi-comments', routerLink: ['/discussions'] });
       const role = this.userInfo?.role;
       if (role == 'host') {
-        this.items.push({ label: 'My Rental Spaces', icon: 'pi pi-fw pi-building', url: '/my-rental-spaces' });
+        this.items.shift();
+        this.items.push({ label: 'My Rental Spaces', icon: 'pi pi-fw pi-building', routerLink: ['/my-rental-spaces'] });
       } else if (role === 'tenant') {
-        this.items.push({ label: 'My Bookings', icon: 'pi pi-fw pi-calendar', url: '/my-bookings' });
+        this.items.push({ label: 'My Bookings', icon: 'pi pi-fw pi-calendar', routerLink: ['/my-bookings'] });
       } else if (role === 'admin') {
-        this.items.push({ label: 'Manage Users', icon: 'pi pi-fw pi-users', url: '/manage-users' });
+        this.items.shift();
+        this.items.shift();
+        this.items.push({ label: 'Manage Users', icon: 'pi pi-fw pi-users', routerLink: ['/manage-users'] });
       }
-      this.items.push({ label: 'Logout', icon: 'pi pi-fw pi-sign-out', url: '/logout' });
+      this.items.push({ label: 'Logout', icon: 'pi pi-fw pi-sign-out', url: '/logout', target: '_self' });
     } else {
-      this.items.push({ label: 'Login', icon: 'pi pi-fw pi-sign-in', url: '/login' });
-      this.items.push({ label: 'Register', icon: 'pi pi-fw pi-user-plus', url: '/register' });
+      this.items.push({ label: 'Login', icon: 'pi pi-fw pi-sign-in', routerLink: ['/login'] });
+      this.items.push({ label: 'Register', icon: 'pi pi-fw pi-user-plus', routerLink: ['/register'] });
     }
   }
 

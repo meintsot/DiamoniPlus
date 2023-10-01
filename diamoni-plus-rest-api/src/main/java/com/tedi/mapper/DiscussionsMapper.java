@@ -20,6 +20,7 @@ public class DiscussionsMapper {
 
         messageType.setSender(message.getSender().getUsername());
         messageType.setReceiver(message.getReceiver().getUsername());
+        messageType.setMessageId(message.getMessageId());
         messageType.setMessageText(message.getMessageText());
         messageType.setDeleted(message.getDeleted());
         messageType.setCreatedAt(DataUtils.fromLocalDateTimeToString(message.getCreatedAt()));

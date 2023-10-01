@@ -7,13 +7,17 @@ import java.time.LocalDateTime;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Message.findByDiscussion_DiscussionReference", query = "select m from Message m " +
-                "where m.discussion.discussionReference = :discussionReference order by m.createdAt desc")
+                "where m.discussion.discussionReference = :discussionReference order by m.createdAt desc"),
+        @NamedQuery(name = "Message.findByMessageId", query = "select m from Message m where m.messageId = :messageId")
 })
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "message_id", nullable = false, unique = true)
+    private String messageId;
 
     @Column(name = "message_text", nullable = false)
     private String messageText;
@@ -49,6 +53,14 @@ public class Message {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     public String getMessageText() {

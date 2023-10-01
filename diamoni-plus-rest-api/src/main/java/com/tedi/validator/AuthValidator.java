@@ -2,6 +2,7 @@ package com.tedi.validator;
 
 import com.tedi.fault.ErrorMessageType;
 import com.tedi.fault.ValidationFault;
+import com.tedi.model.RoleType;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.Objects;
@@ -35,6 +36,12 @@ public class AuthValidator {
 
         if (!matcher.matches()) {
             throw new ValidationFault(ErrorMessageType.MESS_04_AuthService);
+        }
+    }
+
+    public void validateNoAdmin(String role) {
+        if (RoleType.ADMIN.getValue().equals(role)) {
+            throw new ValidationFault(ErrorMessageType.MESS_05_AuthService);
         }
     }
 }

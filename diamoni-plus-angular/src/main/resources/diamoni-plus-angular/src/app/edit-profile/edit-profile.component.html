@@ -9,6 +9,8 @@
         </label>
         <input type="file" id="avatarUpload" accept="image/*" (change)="onUpload($event)" style="display: none;">
       </div>
+      <!-- Delete Avatar Button -->
+      <button *ngIf="avatar" (click)="deleteAvatar()" class="btn btn-danger mt-2">Delete Avatar</button>
     </div>
 
     <hr/>

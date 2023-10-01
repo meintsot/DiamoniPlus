@@ -50,4 +50,9 @@ export class DiscussionsService {
     return this.http.get<RetrieveMessagesRespMsgType>(environment.discussions.messages, {params})
       .pipe(catchError(err => this.errorService.sendError(err)));
   }
+
+  deleteMessage(messageId: string) {
+    const url = environment.discussions.deleteMessage.replace(':messageId', messageId);
+    return this.http.delete(url).pipe(catchError(err => this.errorService.sendError(err)));
+  }
 }

@@ -16,7 +16,7 @@ public class ImageFile {
     private String binaryIdentification;
 
     @Lob
-    @Column(name = "data", columnDefinition = "BLOB")
+    @Column(name = "data", columnDefinition = "LONGBLOB")
     private byte[] data;
 
     @Column(name = "filename", nullable = false)

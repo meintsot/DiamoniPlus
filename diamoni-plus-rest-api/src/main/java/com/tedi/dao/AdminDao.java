@@ -32,14 +32,14 @@ public class AdminDao {
             jpql.append(
                     "select new com.tedi.dto.UserProfileResult(" +
                             "u.username, u.email, u.firstName, u.lastName, u.phone, u.roleType, " +
-                            "u.isHostApproved, u.averageReviews, a.binaryIdentification" +
+                            "u.isHostApproved, u.averageReviews" +
                             ") "
             );
         } else {
             jpql.append("SELECT count(distinct u.id) ");
         }
 
-        jpql.append("from DiamoniPlusUser u join u.avatar a where 1=1 ");
+        jpql.append("from DiamoniPlusUser u where 1=1 ");
 
         if (param.getUsername() != null) {
             jpql.append("and u.username like concat('%', :username, '%') ");
@@ -89,11 +89,13 @@ public class AdminDao {
             query = em.createQuery(jpql.toString(), Long.class);
         }
 
-        paramBinders.forEach(p -> p.accept(query));
+        if (!isCount) {
+            int startIndex = (param.getPage() - 1) * param.getPageSize();
+            query.setFirstResult(startIndex);
+            query.setMaxResults(param.getPageSize());
+        }
 
-        int startIndex = (param.getPage() - 1) * param.getPageSize();
-        query.setFirstResult(startIndex);
-        query.setMaxResults(param.getPageSize());
+        paramBinders.forEach(p -> p.accept(query));
 
         return query;
     }

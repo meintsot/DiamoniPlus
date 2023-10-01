@@ -30,6 +30,7 @@ export const environment = {
   discussions: {
     create: '/api/discussions/',
     myDiscussions: '/api/discussions/users',
-    messages: '/api/discussions/messages'
+    messages: '/api/discussions/messages',
+    deleteMessage: '/api/discussions/messages/:messageId'
   }
 };

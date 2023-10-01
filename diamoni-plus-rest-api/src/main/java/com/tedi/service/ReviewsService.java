@@ -20,6 +20,7 @@ import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @ApplicationScoped
 public class ReviewsService {
@@ -45,7 +46,6 @@ public class ReviewsService {
     @Inject
     ReviewsDao reviewsDao;
 
-//    TODO add exception(s) for submitting only one review for a rental space or a user
     public void submitReview(SubmitReviewReqMsgType param) throws ValidationFault {
 
         reviewsValidator.validateMissingHostUsernameAndBookingReference(param);
@@ -84,12 +84,18 @@ public class ReviewsService {
                 () -> new ValidationFault(ErrorMessageType.DATA_02_ReviewsService)
         );
 
-        host.setAverageReviews(DataUtils.calculateAverage(host.getAverageReviews(), review.getRating(), host.getTotalReviews()));
-        host.setTotalReviews(host.getTotalReviews() + 1);
+        Optional<Review> existingReview = reviewsDao.retrieveReviewsByTenantUsername(tenant.getUsername());
 
-        review.setHost(host);
-        review.setTenant(tenant);
-        reviewsDao.saveReview(review);
+        if (existingReview.isPresent() && Objects.isNull(existingReview.get().getBooking())) {
+            throw new ValidationFault(ErrorMessageType.DATA_05_ReviewsService);
+        } else {
+            host.setAverageReviews(DataUtils.calculateAverage(host.getAverageReviews(), review.getRating(), host.getTotalReviews()));
+            host.setTotalReviews(host.getTotalReviews() + 1);
+
+            review.setHost(host);
+            review.setTenant(tenant);
+            reviewsDao.saveReview(review);
+        }
     }
 
     public RetrieveReviewsRespMsgType retrieveReviews(RetrieveReviewsReqMsgType param) throws ValidationFault {

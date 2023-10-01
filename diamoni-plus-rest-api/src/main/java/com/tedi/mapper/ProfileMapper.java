@@ -5,6 +5,8 @@ import com.tedi.model.DiamoniPlusUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import java.util.Objects;
+
 @ApplicationScoped
 public class ProfileMapper {
 
@@ -20,7 +22,9 @@ public class ProfileMapper {
         getUserProfileRespMsgType.setEmail(diamoniPlusUser.getEmail());
         getUserProfileRespMsgType.setPhone(diamoniPlusUser.getPhone());
         getUserProfileRespMsgType.setDesiredRole(diamoniPlusUser.getRoleType().getValue());
-        getUserProfileRespMsgType.setAvatar(imageFileMapper.toImageFileType(diamoniPlusUser.getAvatar()));
+        if (Objects.nonNull(diamoniPlusUser.getAvatar())) {
+            getUserProfileRespMsgType.setAvatar(imageFileMapper.toImageFileType(diamoniPlusUser.getAvatar()));
+        }
 
         return getUserProfileRespMsgType;
     }

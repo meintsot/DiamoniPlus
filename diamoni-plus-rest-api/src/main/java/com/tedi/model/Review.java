@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Review.findByHost_Username", query = "select r from Review r where r.host.username = :username"),
-        @NamedQuery(name = "Review.findByBooking_RentalSpace_RentalSpaceReference", query = "select r from Review r where r.booking.rentalSpace.rentalSpaceReference = :rentalSpaceReference")
+        @NamedQuery(name = "Review.findByBooking_RentalSpace_RentalSpaceReference", query = "select r from Review r where r.booking.rentalSpace.rentalSpaceReference = :rentalSpaceReference"),
+        @NamedQuery(name = "Review.findByTenant_Username", query = "select r from Review r where r.tenant.username = :username")
 })
 public class Review {
     @Id

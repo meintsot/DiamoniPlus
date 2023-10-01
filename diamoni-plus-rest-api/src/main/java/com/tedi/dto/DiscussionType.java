@@ -6,12 +6,9 @@ public class DiscussionType {
 
     private String username;
 
-    private String avatarReference;
-
-    public DiscussionType(String discussionReference, String username, String avatarReference) {
+    public DiscussionType(String discussionReference, String username) {
         this.discussionReference = discussionReference;
         this.username = username;
-        this.avatarReference = avatarReference;
     }
 
     public String getDiscussionReference() {
@@ -28,13 +25,5 @@ public class DiscussionType {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getAvatarReference() {
-        return avatarReference;
-    }
-
-    public void setAvatarReference(String avatarReference) {
-        this.avatarReference = avatarReference;
     }
 }

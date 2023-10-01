@@ -4,7 +4,10 @@
       <div *ngFor="let discussion of discussionForm.controls; let i = index" class="chat-item" (click)="selectDiscussion(discussion)">
         <p-card class="chat-card">
           <div class="chat-item-content">
-            <p-avatar [image]="discussionImages[i]" size="large" shape="circle" class="avatar"></p-avatar>
+            <p-avatar *ngIf="discussionImages[i] && discussionImages[i].length !== 0" [image]="discussionImages[i]"
+                      size="large" shape="circle" class="avatar"></p-avatar>
+            <p-avatar *ngIf="!discussionImages[i] || discussionImages[i].length === 0" [label]="discussion.value.username.substring(0, 1)"
+                      size="large" shape="circle" class="avatar"></p-avatar>
             <span class="info">Discuss with {{discussion.value.username}}</span>
           </div>
         </p-card>

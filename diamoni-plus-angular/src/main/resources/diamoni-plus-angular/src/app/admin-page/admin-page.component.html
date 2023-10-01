@@ -34,14 +34,14 @@
       <div class="col">
         <span class="p-input-icon-left">
           <i class="pi pi-id-card"></i>
-          <input id="roleType" type="text" pInputText formControlName="roleType" placeholder="Role Type" />
+          <p-dropdown [options]="roles" formControlName="roleType" placeholder="Role Type" />
         </span>
       </div>
       <div class="col-auto">
         <div class="d-flex align-items-center">
           <i class="pi pi-check"></i>
           <label for="isHostApproved" class="mb-0 ms-2">Host approved:</label>
-          <p-checkbox id="isHostApproved" [binary]="true" formControlName="isHostApproved" class="ms-2"></p-checkbox>
+          <p-triStateCheckbox  id="isHostApproved" formControlName="isHostApproved" class="ms-2"></p-triStateCheckbox>
         </div>
       </div>
       <div class="col">
@@ -51,6 +51,7 @@
         </span>
       </div>
     </div>
+    <p-button label="Reset filters" icon="pi pi-times" (onClick)="resetFilters()"></p-button>
   </form>
   <div class="d-flex align-items-center justify-content-between mb-3">
     <div>
