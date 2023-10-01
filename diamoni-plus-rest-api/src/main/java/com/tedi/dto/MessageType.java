@@ -6,6 +6,8 @@ public class MessageType {
 
     private String receiver;
 
+    private String messageId;
+
     private String messageText;
 
     private Boolean isDeleted;
@@ -26,6 +28,14 @@ public class MessageType {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     public String getMessageText() {

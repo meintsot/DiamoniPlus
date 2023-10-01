@@ -108,6 +108,7 @@ public class DiscussionsService {
         message.setSender(sender);
         message.setReceiver(receiver);
         message.setDiscussion(discussion);
+        message.setMessageId(UUID.randomUUID().toString());
         message.setCreatedAt(LocalDateTime.now());
         message.setUpdatedAt(LocalDateTime.now());
 
@@ -117,5 +118,12 @@ public class DiscussionsService {
         discussion.setUpdatedAt(LocalDateTime.now());
         sender.getSentMessages().add(message);
         receiver.getReceivedMessages().add(message);
+    }
+
+    public void deleteMessage(String messageId) {
+        Message message = discussionsDao.retrieveMessage(messageId).orElseThrow(
+                () -> new ValidationFault(ErrorMessageType.DATA_06_DiscussionsService)
+        );
+        message.setDeleted(true);
     }
 }

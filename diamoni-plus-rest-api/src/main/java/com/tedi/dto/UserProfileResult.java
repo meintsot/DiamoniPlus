@@ -12,13 +12,11 @@ public class UserProfileResult {
     private String roleType;
     private Boolean isHostApproved;
     private Double averageReviews;
-    private String avatarIdentification;
 
     public UserProfileResult(
             String username, String email, String firstName,
             String lastName, String phone, RoleType roleType,
-            Boolean isHostApproved, Double averageReviews,
-            String avatarIdentification
+            Boolean isHostApproved, Double averageReviews
     ) {
         this.username = username;
         this.email = email;
@@ -28,7 +26,6 @@ public class UserProfileResult {
         this.roleType = roleType.getValue();
         this.isHostApproved = isHostApproved;
         this.averageReviews = averageReviews;
-        this.avatarIdentification = avatarIdentification;
     }
 
     public String getUsername() {
@@ -93,13 +90,5 @@ public class UserProfileResult {
 
     public void setAverageReviews(Double averageReviews) {
         this.averageReviews = averageReviews;
-    }
-
-    public String getAvatarIdentification() {
-        return avatarIdentification;
-    }
-
-    public void setAvatarIdentification(String avatarIdentification) {
-        this.avatarIdentification = avatarIdentification;
     }
 }

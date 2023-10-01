@@ -42,6 +42,7 @@ public class AuthService {
         authValidator.validateUsername(param.getUsername());
         authValidator.validatePassword(param.getPassword(), param.getPasswordConfirmation());
         authValidator.validateEmail(param.getEmail());
+        authValidator.validateNoAdmin(param.getDesiredRole());
 
         DiamoniPlusUser diamoniPlusUser = diamoniPlusUserDao.findByUsername(param.getUsername()).orElse(null);
 

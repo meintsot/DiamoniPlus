@@ -54,4 +54,13 @@ public class DiscussionsResource {
         RetrieveMessagesReqMsgType param = messagesQueryParametersConverter.convertRetrieveMessagesParams(uriInfo);
         return discussionsService.retrieveMessages(param);
     }
+
+    @DELETE
+    @RolesAllowed(Roles.HOST)
+    @Path("/messages/{messageId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public void deleteMessage(@PathParam("messageId") String messageId) {
+        discussionsService.deleteMessage(messageId);
+    }
 }

@@ -16,7 +16,7 @@ import {InfoService} from "../services/info.service";
 export class EditProfileComponent implements OnInit, OnDestroy {
   editProfileForm!: FormGroup;
   profile!: GetUserProfileRespMsgType;
-  avatar!: string;
+  avatar!: string | null;
   avatarChanged = false;
   roles!: any[];
   isLoading = true;
@@ -46,8 +46,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     ).subscribe(profile => {
       this.profile = profile;
       this.isLoading = false;
-      this.avatar = Utils.createDataUrl(profile.avatar);
-      this.patchUserProfile();
+      if (!Utils.isNullOrUndefined(profile.avatar)) {
+        this.avatar = Utils.createDataUrl(profile.avatar as ImageFileType);
+      }
+      this.patchUserProfile(profile);
     });
   }
 
@@ -65,6 +67,12 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
   isFormTheSame() {
     return Utils.areObjectsEqual(this.editProfileForm.value, this.profile) && !this.avatarChanged;
+  }
+
+  deleteAvatar() {
+    this.avatar = null;
+    this.profile.avatar = undefined;
+    this.avatarChanged = true;
   }
 
   onUpload(event: Event): void {
@@ -101,8 +109,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     ];
   }
 
-  private patchUserProfile() {
-    this.editProfileForm.patchValue(this.profile);
+  private patchUserProfile(profile: GetUserProfileRespMsgType) {
+    this.editProfileForm.patchValue(profile);
   }
 
   private initForm() {

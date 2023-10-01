@@ -7,10 +7,7 @@ import com.tedi.model.Discussion;
 import com.tedi.model.Message;
 import com.tedi.model.RoleType;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,18 +61,28 @@ public class DiscussionsDao {
 
         if (RoleType.HOST.getValue().equals(role)) {
             return em.createQuery("select new com.tedi.dto.DiscussionType(" +
-                            "d.discussionReference, d.tenant.username, d.tenant.avatar.binaryIdentification" +
+                            "d.discussionReference, d.tenant.username" +
                             ") from Discussion d " +
                             "where d.host.username = :username order by d.updatedAt desc", DiscussionType.class)
                     .setParameter("username", username)
                     .getResultList();
         } else {
             return em.createQuery("select new com.tedi.dto.DiscussionType(" +
-                            "d.discussionReference, d.host.username, d.host.avatar.binaryIdentification" +
+                            "d.discussionReference, d.host.username" +
                             ") from Discussion d " +
                             "where d.tenant.username = :username order by d.updatedAt desc", DiscussionType.class)
                     .setParameter("username", username)
                     .getResultList();
+        }
+    }
+
+    public Optional<Message> retrieveMessage(String messageId) {
+        try {
+            TypedQuery<Message> query = em.createNamedQuery("Message.findByMessageId", Message.class)
+                    .setParameter("messageId", messageId);
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
     }
 

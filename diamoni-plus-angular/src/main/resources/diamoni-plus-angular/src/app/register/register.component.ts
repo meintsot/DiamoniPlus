@@ -27,8 +27,7 @@ export class RegisterComponent implements OnInit {
   initRoles() {
     this.roles = [
       { label: 'Host', value: 'host' },
-      { label: 'Tenant', value: 'tenant' },
-      { label: 'Admin', value: 'admin' },
+      { label: 'Tenant', value: 'tenant' }
     ];
   }
 

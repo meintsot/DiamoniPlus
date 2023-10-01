@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AdminService} from "../services/admin.service";
 import {NavigationExtras, Router} from "@angular/router";
-import {catchError, EMPTY, Subject, switchMap, takeUntil} from "rxjs";
+import {catchError, EMPTY, Subject, switchMap, takeUntil, tap} from "rxjs";
 import {SearchUserProfilesReqMsgType, UserProfileResult} from "../model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {TablePageEvent} from "primeng/table";
@@ -27,6 +27,8 @@ export class AdminPageComponent implements OnInit, OnDestroy {
 
   totalUsers = 0;
 
+  roles!: any[];
+
   private loadUsersLazy = new Subject<SearchUserProfilesReqMsgType>();
 
   private destroy = new Subject<void>();
@@ -40,8 +42,10 @@ export class AdminPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initFilterForm();
+    this.initRoles();
 
     this.loadUsersLazy.pipe(
+      tap(info =>console.error(info)),
       switchMap(params => this.adminService.searchUserProfiles(params)),
       catchError(err => EMPTY),
       takeUntil(this.destroy)
@@ -59,6 +63,14 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     this.pageSize = $event.rows;
 
     this.onLoadUsersLazy();
+  }
+
+  initRoles() {
+    this.roles = [
+      { label: 'Host', value: 'host' },
+      { label: 'Tenant', value: 'tenant' },
+      { label: 'Admin', value: 'admin' }
+    ];
   }
 
   exportData() {
@@ -129,5 +141,9 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     };
 
     this.router.navigate(['/view-profile'], navigationExtras);
+  }
+
+  resetFilters() {
+    this.filterForm.reset();
   }
 }

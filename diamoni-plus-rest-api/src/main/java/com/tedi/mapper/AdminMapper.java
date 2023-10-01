@@ -97,7 +97,8 @@ public class AdminMapper {
         rentalSpacesForExportType.setLocation(rentalSpaceMapper.toLocationType(rentalSpace.getLocation()));
         rentalSpacesForExportType.setTransportationAccess(rentalSpaceMapper.toTransportationAccessType(rentalSpace.getTransportationAccess()));
         rentalSpacesForExportType.setReviews(
-                rentalSpace.getBookings().stream().map(booking -> toReviewsForExportType(booking.getReview())).toList()
+                rentalSpace.getBookings().stream().filter(booking -> Objects.nonNull(booking.getReview()))
+                        .map(booking -> toReviewsForExportType(booking.getReview())).toList()
         );
 
         return rentalSpacesForExportType;

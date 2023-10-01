@@ -268,7 +268,7 @@ export interface GetUserProfileRespMsgType {
   email: string;
   phone: string;
   desiredRole: string;
-  avatar: ImageFileType;
+  avatar?: ImageFileType;
 }
 
 export interface UpdateUserProfileReqMsgType {
@@ -331,7 +331,6 @@ export interface RetrieveDiscussionsRespMsgType {
 export interface DiscussionType {
   discussionReference: string;
   username: string;
-  avatarReference: string;
 }
 
 export interface RetrieveMessagesReqMsgType {
@@ -348,6 +347,7 @@ export interface MessageType {
   sender: string;
   receiver: string;
   messageText: string;
+  messageId?: string;
   deleted: boolean;
   createdAt: string;
 }

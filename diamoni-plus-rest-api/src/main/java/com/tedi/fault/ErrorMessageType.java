@@ -6,6 +6,7 @@ public enum ErrorMessageType {
     MESS_02_AuthService("Password must be at least 5 characters long."),
     MESS_03_AuthService("Password and password confirmation must match."),
     MESS_04_AuthService("Email must have a specific format (ex: somewhat@gmail.com)."),
+    MESS_05_AuthService("Cannot register an admin user."),
 
     DATA_01_AuthService("Username must be unique."),
     DATA_02_AuthService("Email must be unique."),
@@ -32,6 +33,7 @@ public enum ErrorMessageType {
     DATA_02_ReviewsService("Host not found!"),
     DATA_03_ReviewsService("Booking not found!"),
     DATA_04_ReviewsService("Rental Space not found!"),
+    DATA_05_ReviewsService("You have already submitted your review!"),
 
     DATA_01_BookingService("Tenant not found."),
     DATA_02_BookingService("Rental space not found."),
@@ -44,7 +46,8 @@ public enum ErrorMessageType {
     DATA_02_DiscussionsService("Tenant not found."),
     DATA_03_DiscussionsService("Discussion not found."),
     DATA_04_DiscussionsService("Sender not found."),
-    DATA_05_DiscussionsService("Receiver not found.");
+    DATA_05_DiscussionsService("Receiver not found."),
+    DATA_06_DiscussionsService("Message not found.");
 
     private final String error;
 
