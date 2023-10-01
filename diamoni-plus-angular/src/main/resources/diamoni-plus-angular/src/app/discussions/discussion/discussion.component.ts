@@ -142,7 +142,7 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnChanges, On
 
 
   initializeWebSocket() {
-    this.socket = webSocket(`ws://localhost:8080/discussions/messages/${this.selectedDiscussion}`);
+    this.socket = webSocket(`wss://localhost/discussions/messages/${this.selectedDiscussion}`);
     this.socket.subscribe(
       message => this.handleIncomingMessage(message)
     );
